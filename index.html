@@ -1,312 +1,715 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rutina Hipertrofia & Progresión 10K</title>
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --text: #f8fafc;
-      --accent: #10b981;
-      --muted: #64748b;
-      --link: #38bdf8;
-    }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 1rem;
-      max-width: 600px;
-      margin-inline: auto;
-    }
-    h1 { text-align: center; font-size: 1.4rem; margin-bottom: 0.25rem; color: var(--link); }
-    .subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 1.25rem; }
-    
-    .week-selector {
-      background: var(--card-bg);
-      padding: 0.8rem;
-      border-radius: 10px;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid #334155;
-    }
-    .week-selector select {
-      background: var(--bg);
-      color: var(--text);
-      border: 1px solid var(--muted);
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-
-    .day-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
-    }
-    .day-title {
-      font-size: 1.1rem;
-      color: var(--accent);
-      margin-top: 0;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 0.5rem;
-    }
-    .exercise-item {
-      display: flex;
-      flex-direction: column;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #334155;
-    }
-    .exercise-item:last-child { border-bottom: none; }
-    .exercise-main {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .exercise-info { display: flex; flex-direction: column; padding-right: 0.5rem; }
-    .exercise-name { font-weight: 600; font-size: 0.95rem; }
-    .exercise-details { font-size: 0.8rem; color: #94a3b8; margin-top: 0.15rem; }
-    
-    .log-inputs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      align-items: center;
-    }
-    .log-inputs input {
-      background: var(--bg);
-      border: 1px solid #334155;
-      color: var(--text);
-      padding: 0.35rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .img-link {
-      display: inline-block;
-      margin-top: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--link);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .img-link:hover { text-decoration: underline; }
-
-    input[type="checkbox"] {
-      width: 1.3rem;
-      height: 1.3rem;
-      accent-color: var(--accent);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .completed { opacity: 0.4; text-decoration: line-through; }
-    .reset-btn {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      background: #334155;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 1.5rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mi Rutina 10K</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rutina 10K">
+<meta name="theme-color" content="#0f1115">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0f1115; --card:#181b21; --card2:#20242c; --line:#2c313b;
+  --text:#f3f4f6; --text2:#b4b9c3; --muted:#7d8491;
+  --accent:#3987e5; --accent-ink:#ffffff; --accent-soft:rgba(57,135,229,.16);
+  --good:#22a55b; --warn:#d99a00; --bad:#e66767;
+  --good-soft:rgba(34,165,91,.15); --warn-soft:rgba(217,154,0,.15); --bad-soft:rgba(230,103,103,.15);
+  --radius:14px;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme: light;
+    --bg:#f4f5f7; --card:#ffffff; --card2:#f0f2f5; --line:#dfe2e7;
+    --text:#111318; --text2:#4a4f59; --muted:#7a808b;
+    --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+    --good:#16813f; --warn:#9a6a00; --bad:#c43c3b;
+    --good-soft:rgba(22,129,63,.12); --warn-soft:rgba(154,106,0,.12); --bad-soft:rgba(196,60,59,.12);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;font-size:15px;line-height:1.4;
+  padding:env(safe-area-inset-top) 0 calc(96px + env(safe-area-inset-bottom));-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 8px;border-bottom:1px solid var(--line)}
+.top h1{font-size:19px;margin:0 0 8px;letter-spacing:-.01em}
+.tabs{display:flex;gap:6px}
+.tabs button{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text2);font-size:13px;font-weight:600}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font:inherit;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:8px 9px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+textarea{resize:vertical;min-height:60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:12px 0}
+.muted{color:var(--muted)} .t2{color:var(--text2)} .small{font-size:13px}
+.row{display:flex;gap:8px;align-items:center}
+.weeknav{display:flex;align-items:center;gap:8px;margin-top:12px}
+.weeknav button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:20px}
+.weeknav .wk{flex:1;text-align:center}
+.wk b{font-size:18px;display:block}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--text)}
+.pill.deload{background:var(--warn-soft)}
+.pill.now{background:var(--good-soft)}
+.target{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.target div{background:var(--card2);border-radius:10px;padding:10px}
+.target .big{font-size:22px;font-weight:700;display:block}
+.sess{padding:0;overflow:hidden}
+.sess-h{display:flex;align-items:center;gap:10px;padding:14px;width:100%;background:none;border:0;color:var(--text);text-align:left}
+.sess-h .ttl{flex:1}
+.sess-h .ttl b{display:block;font-size:16px}
+.ring{width:42px;height:42px;flex-shrink:0}
+.chev{color:var(--muted);transition:transform .2s}
+.sess.open .chev{transform:rotate(90deg)}
+.sess-b{display:none;border-top:1px solid var(--line);padding:0 14px 14px}
+.sess.open .sess-b{display:block}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.meta label,.fld label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.ex{border-bottom:1px solid var(--line);padding:14px 0}
+.ex:last-of-type{border-bottom:0}
+.ex-h{display:flex;gap:10px;align-items:flex-start}
+.ex-h .nm{flex:1}
+.ex-h .nm b{font-size:15px}
+.ex-h .nm .det{font-size:13px;color:var(--text2);margin-top:2px}
+.tag{font-size:11px;font-weight:700;color:var(--good);margin-left:4px;vertical-align:1px}
+.chk{width:30px;height:30px;border-radius:9px;border:2px solid var(--line);background:var(--card2);flex-shrink:0;display:grid;place-items:center;color:transparent;font-size:17px;font-weight:800}
+.ex.done .chk{background:var(--good);border-color:var(--good);color:#fff}
+.ex.done .nm b{color:var(--text2)}
+.hint{font-size:13px;margin-top:8px;padding:7px 9px;border-radius:9px;background:var(--card2);color:var(--text2)}
+.hint.up{background:var(--good-soft);color:var(--text)}
+.sets{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;margin-top:8px}
+.sets .fld input{text-align:center;padding:8px 4px}
+.cardio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.pace{font-size:13px;margin-top:6px;color:var(--text2)}
+.linkbtn{background:none;border:0;color:var(--accent);padding:6px 0 0;font-size:13px;font-weight:600}
+.tech{display:none;margin-top:8px;background:var(--card2);border-radius:12px;overflow:hidden}
+.tech.show{display:block}
+.frames{position:relative;aspect-ratio:3/2;background:#000}
+.frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s}
+.frames img.b{animation:flip 2.4s infinite steps(1)}
+@keyframes flip{0%{opacity:0}50%{opacity:1}}
+.frames .lbl{position:absolute;left:8px;bottom:8px;font-size:11px;background:rgba(0,0,0,.6);color:#fff;padding:2px 7px;border-radius:6px}
+.tech ul{margin:0;padding:10px 12px 10px 28px;font-size:13px;color:var(--text2)}
+.tech .hip{margin:0 12px 12px;font-size:13px;padding:8px 10px;border-radius:9px;background:var(--warn-soft);color:var(--text)}
+.btn{display:block;width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--text);font-weight:600;margin-top:10px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{color:var(--bad)}
+.hipbox{margin-top:10px;font-size:13px;padding:9px 11px;border-radius:10px}
+.hipbox.ok{background:var(--good-soft)} .hipbox.mid{background:var(--warn-soft)} .hipbox.bad{background:var(--bad-soft)}
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.timer .in{max-width:640px;margin:0 auto;display:flex;gap:8px;align-items:center}
+.timer .clock{font-variant-numeric:tabular-nums;font-size:24px;font-weight:700;min-width:70px}
+.timer .clock.run{color:var(--accent)}
+.timer button{flex:1;padding:10px 0;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--text);font-weight:600}
+.timer button.stop{flex:.8}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--text);color:var(--bg);font-size:12px;padding:4px 8px;border-radius:7px;white-space:nowrap;transform:translate(-50%,-120%);display:none;font-weight:600}
+.chart-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.chart-h h3{margin:0;font-size:15px}
+.chart-h .last{font-size:13px;color:var(--text2)}
+.empty{font-size:13px;color:var(--muted);padding:18px 0;text-align:center}
+.plan h2{font-size:17px;margin:0 0 8px}
+.plan h3{font-size:15px;margin:14px 0 6px}
+.plan p,.plan li{color:var(--text2);font-size:14px}
+.plan ul{padding-left:20px;margin:6px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:14px;font-weight:600;z-index:50;display:none}
+.hidden{display:none!important}
+</style>
 </head>
 <body>
+<header class="top"><div class="wrap">
+  <h1>🏃 Rutina · Hipertrofia + 10K</h1>
+  <nav class="tabs">
+    <button data-tab="semana" class="on">Semana</button>
+    <button data-tab="progreso">Progreso</button>
+    <button data-tab="plan">Plan</button>
+    <button data-tab="datos">Datos</button>
+  </nav>
+</div></header>
 
-  <h1>🏃‍♂️ Rutina & Plan Progresión 10K</h1>
-  <div class="subtitle">Hipertrofia, Resistencia y Control de Cargas</div>
+<main class="wrap">
+  <section id="tab-semana"></section>
+  <section id="tab-progreso" class="hidden"></section>
+  <section id="tab-plan" class="hidden plan"></section>
+  <section id="tab-datos" class="hidden"></section>
+</main>
 
-  <div class="week-selector">
-    <label for="weekSelect"><strong>Semana actual:</strong></label>
-    <select id="weekSelect" onchange="changeWeek(this.value)">
-      <option value="1">Semana 1 (Base 5 km)</option>
-      <option value="2">Semana 2 (Base 5 km)</option>
-      <option value="3">Semana 3 (Subida 6 km)</option>
-      <option value="4">Semana 4 (Asimilación 6 km)</option>
-      <option value="5">Semana 5 (Subida 7 km)</option>
-      <option value="6">Semana 6 (Asimilación 7 km)</option>
-      <option value="7">Semana 7 (Subida 8 km)</option>
-      <option value="8">Semana 8 (Asimilación 8 km)</option>
-      <option value="9">Semana 9 (DESCARGA 4 km)</option>
-      <option value="10">Semana 10 (Subida 9 km)</option>
-      <option value="11">Semana 11 (Asimilación 9 km)</option>
-      <option value="12">Semana 12 (¡RETO 10 KM!)</option>
-    </select>
+<div class="timer" id="timer"><div class="in">
+  <span class="clock" id="clock">0:00</span>
+  <button data-t="60">60 s</button><button data-t="90">90 s</button><button data-t="120">2 min</button>
+  <button class="stop" id="tstop">✕</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN DEL PLAN  (edita aquí si cambian ejercicios)
+   ============================================================ */
+const IMG = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
+const TOTAL_WEEKS = 12;
+const DELOAD = [8];
+
+// Carrera principal (Sesión B). Ritmo fácil orientativo 7:15–7:45 min/km.
+const RUN_KM = {1:5,2:5,3:5.5,4:6,5:6.5,6:7,7:7.5,8:5,9:8,10:8.5,11:9,12:10};
+const EASY_MIN = 7.25, EASY_MAX = 7.75;
+
+function isDeload(w){ return DELOAD.includes(+w); }
+function runText(w){
+  const km = RUN_KM[w], a = Math.round(km*EASY_MIN), b = Math.round(km*EASY_MAX);
+  if (isDeload(w)) return `${fmtKm(km)} km muy suaves (~${a}–${b} min). Semana de descarga: nada de apretar.`;
+  if (w==12) return `${fmtKm(km)} km continuos a ritmo cómodo (~${a}–${b} min). ¡Objetivo! Sal más lento de lo que crees.`;
+  return `${fmtKm(km)} km continuos a ritmo conversacional (~${a}–${b} min). Si no puedes hablar, baja el ritmo.`;
+}
+function cardioAText(w){
+  if (w<=4 || isDeload(w)) return '15 min elíptica o bici a ritmo conversacional.';
+  return '15–20 min de trote suave en cinta (1 % inclinación). Si la cadera está >2/10, haz elíptica.';
+}
+
+const SESSIONS = {
+ A:{ title:'Sesión A', sub:'Torso + core', items:[
+  {id:'a0',type:'check',name:'Calentamiento',detail:'5 min bici suave + 2×10 puente de glúteo + círculos de cadera suaves',img:'Bicycling_Stationary',
+   cues:['Sube pulsaciones poco a poco','Puente: aprieta glúteo arriba 2 s','Círculos pequeños, sin forzar el final del rango']},
+  {id:'a1',type:'str',name:'Press de banca',sets:4,min:8,max:10,inc:2.5,img:'Barbell_Bench_Press_-_Medium_Grip',
+   cues:['Escápulas juntas y hacia abajo','Baja la barra a la parte baja del pecho','Pies firmes, glúteo apoyado','Deja 1–2 reps en recámara']},
+  {id:'a2',type:'str',name:'Remo en polea baja (Gironda)',sets:4,min:10,max:12,inc:2.5,img:'Seated_Cable_Rows',
+   cues:['Pecho alto, espalda neutra','Lleva los codos atrás pegados al cuerpo','No balancees el tronco']},
+  {id:'a3',type:'str',name:'Press militar con mancuernas (sentado)',sets:3,min:10,max:12,inc:2,img:'Dumbbell_Shoulder_Press',
+   cues:['Respaldo casi vertical','Mancuernas a la altura de la oreja abajo','No arquees la zona lumbar']},
+  {id:'a4',type:'str',name:'Jalón al pecho',sets:3,min:10,max:12,inc:2.5,img:'Wide-Grip_Lat_Pulldown',
+   cues:['Tira con los codos hacia los bolsillos','Barra a la parte alta del pecho','Controla la subida']},
+  {id:'a5',type:'str',name:'Elevaciones laterales',sets:3,min:12,max:15,inc:1,img:'Side_Lateral_Raise',
+   cues:['Codos ligeramente flexionados','Sube hasta la altura del hombro','Sin impulso']},
+  {id:'a6',type:'str',name:'Curl de bíceps en polea',sets:3,min:10,max:12,inc:2.5,img:'Standing_Biceps_Cable_Curl',
+   cues:['Codos quietos pegados al cuerpo','Baja lento (2 s)']},
+  {id:'a7',type:'str',name:'Extensión de tríceps en polea (cuerda)',sets:3,min:10,max:12,inc:2.5,img:'Triceps_Pushdown_-_Rope_Attachment',
+   cues:['Codos fijos','Abre la cuerda abajo','Puedes alternarlo con el curl si la polea está libre']},
+  {id:'a8',type:'str',name:'Elevación de gemelos de pie',sets:3,min:12,max:15,inc:2.5,img:'Standing_Calf_Raises',isNew:true,
+   cues:['Sube alto, pausa 1 s arriba','Baja lento hasta estirar','Clave para aguantar más km sin sobrecargar tobillo/rodilla']},
+  {id:'a9',type:'str',name:'Pallof press (core antirrotación)',sets:3,min:10,max:12,inc:2.5,img:'Pallof_Press',isNew:true,unit:'reps/lado',
+   cues:['De lado a la polea, pies a la anchura de caderas','Estira los brazos sin dejar que el tronco gire','Protege la pelvis al correr'],
+   hip:'Sustituye a la plancha: trabaja el core sin flexión de cadera.'},
+  {id:'a10',type:'cardio',name:'Cardio final',detail:cardioAText,img:'Jogging_Treadmill',
+   cues:['Ritmo en el que puedas hablar','Anota km, minutos y ppm medias del Huawei']}
+ ]},
+ B:{ title:'Sesión B', sub:'Carrera', items:[
+  {id:'b0',type:'check',name:'Calentamiento',detail:'5 min caminando rápido + 4×20 s de trote progresivo',img:'Walking_Treadmill',
+   cues:['Empieza muy suave','Las primeras 2–3 min de trote deben parecer demasiado fáciles']},
+  {id:'b1',type:'cardio',name:'Carrera principal',detail:runText,img:'Running_Treadmill',main:true,
+   cues:['Test del habla: debes poder decir frases completas','Orientativo: zona 2 de tu Huawei (~130–145 ppm)','Terreno blando o cinta si notas la cadera','Mejor ir lento y llegar que rápido y parar'],
+   hip:'Si llueve o la cadera avisa: 30–40 min de elíptica al mismo esfuerzo cuenta como sesión hecha (anótalo).'},
+  {id:'b2',type:'check',name:'Vuelta a la calma y estiramientos',detail:'5 min caminando + estiramiento de flexor de cadera, gemelo e isquios (30 s c/u)',img:'Kneeling_Hip_Flexor',
+   cues:['Estiramiento de flexor en zancada: glúteo apretado, sin arquear','Nada de estiramientos en flexión profunda + rotación interna'],
+   hip:'Evita posturas tipo “paloma” o rodilla al pecho cruzada: son las que pinzan en un choque femoroacetabular.'}
+ ]},
+ C:{ title:'Sesión C', sub:'Pierna adaptada + torso', items:[
+  {id:'c0',type:'check',name:'Calentamiento',detail:'5 min bici o elíptica + 2×10 puente de glúteo + 2×10 abducción con banda',img:'Bicycling_Stationary',
+   cues:['Activa glúteo medio antes de cargar','Sin rangos forzados']},
+  {id:'c1',type:'str',name:'Prensa de piernas (rango cómodo)',sets:4,min:10,max:12,inc:5,img:'Leg_Press',
+   cues:['Pies a la anchura de hombros o algo más abiertos, puntas ligeramente fuera','Baja solo hasta que la pelvis no se despegue del respaldo','Rodillas siguen la línea de los pies'],
+   hip:'No bajes el carro hasta que la cadera “pince” o la lumbar se redondee.'},
+  {id:'c2',type:'str',name:'Peso muerto rumano con mancuernas',sets:3,min:8,max:10,inc:2,img:'Stiff-Legged_Dumbbell_Deadlift',
+   cues:['Caderas atrás, espalda neutra','Mancuernas pegadas a las piernas','Baja hasta media tibia o donde notes isquios, no más'],
+   hip:'Rango controlado; si la cadera molesta, cámbialo por curl femoral sentado.'},
+  {id:'c3',type:'str',name:'Hip thrust / puente de glúteo',sets:3,min:10,max:12,inc:5,img:'Barbell_Hip_Thrust',
+   cues:['Barbilla recogida','Sube hasta alinear rodilla-cadera-hombro','Pausa 1 s arriba apretando glúteo']},
+  {id:'c4',type:'str',name:'Curl femoral en máquina',sets:3,min:10,max:12,inc:2.5,img:'Lying_Leg_Curls',
+   cues:['Cadera pegada al banco','Baja en 2–3 s']},
+  {id:'c5',type:'str',name:'Abductor en máquina (glúteo medio)',sets:3,min:12,max:15,inc:2.5,img:'Thigh_Abductor',isNew:true,
+   cues:['Espalda apoyada, tronco algo inclinado adelante','Abre y aguanta 1 s','Controla el cierre'],
+   hip:'El glúteo medio estabiliza la pelvis en cada zancada: es tu mejor protección de cadera para correr.'},
+  {id:'c6',type:'str',name:'Contractora / aperturas en máquina',sets:3,min:10,max:12,inc:2.5,img:'Butterfly',
+   cues:['Codos ligeramente flexionados','Junta al frente sin chocar','Vuelve lento']},
+  {id:'c7',type:'str',name:'Remo unilateral con mancuerna',sets:3,min:10,max:12,inc:2,img:'One-Arm_Dumbbell_Row',unit:'reps/brazo',
+   cues:['Mano y rodilla apoyadas en banco','Tira hacia la cadera','Sin girar el tronco']},
+  {id:'c8',type:'str',name:'Paseo del granjero',sets:3,min:40,max:40,inc:2,img:'Farmers_Walk',unit:'metros',
+   cues:['Mancuernas pesadas a los lados','Pasos cortos, tronco erguido','Peso = por mano']},
+  {id:'c9',type:'cardio',name:'Cardio final',detail:()=> '10–15 min elíptica o bici suave (sin carrera: las piernas vienen cargadas).',img:'Elliptical_Trainer',
+   cues:['Suave, para soltar piernas']}
+ ]}
+};
+
+/* ============================================================
+   ESTADO Y ALMACENAMIENTO
+   ============================================================ */
+const KEY = 'rutina10k_v1';
+let memoryStore = null;
+function load(){
+  try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
+  return memoryStore || {v:1, startDate:'', week:1, weeks:{}};
+}
+function persist(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ memoryStore = S; }
+}
+let S = load();
+const ui = {tab:'semana', open:{}, tech:{}, chartEx:'c1'};
+
+function W(w){ w=String(w); if(!S.weeks[w]) S.weeks[w]={bw:'',notes:'',s:{}}; return S.weeks[w]; }
+function Sess(w,k){ const x=W(w); if(!x.s[k]) x.s[k]={date:'',rpe:'',hipD:'',hipN:'',notes:'',ex:{}}; return x.s[k]; }
+function Ex(w,k,id){ const s=Sess(w,k); if(!s.ex[id]) s.ex[id]={done:false,w:'',r:[],km:'',min:'',ppm:''}; return s.ex[id]; }
+function peekEx(w,k,id){ const x=S.weeks[String(w)]; return x && x.s[k] && x.s[k].ex[id]; }
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(String(v).replace(',','.')); return isNaN(n)?null:n; };
+function fmtKm(k){ return String(k).replace('.',','); }
+function fmtN(n){ return (Math.round(n*10)/10).toString().replace('.',','); }
+function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}`; }
+function pace(km,min){ const k=num(km), m=num(min); if(!k||!m) return ''; const p=m/k, mm=Math.floor(p), ss=Math.round((p-mm)*60); return `${mm}:${String(ss===60?0:ss).padStart(2,'0')} min/km`; }
+function paceVal(km,min){ const k=num(km), m=num(min); return (k&&m)? m/k : null; }
+function toast(t){ const el=$('#toast'); el.textContent=t; el.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>el.style.display='none',1800); }
+function currentWeekFromStart(){
+  if(!S.startDate) return null;
+  const d0=new Date(S.startDate+'T00:00:00'), diff=Math.floor((Date.now()-d0)/86400000);
+  return Math.min(TOTAL_WEEKS, Math.max(1, Math.floor(diff/7)+1));
+}
+
+/* Sugerencia de progresión (doble progresión) */
+function prevLog(w,k,it){
+  for(let p=w-1;p>=1;p--){
+    if(isDeload(p) && !isDeload(w)) continue;
+    const e=peekEx(p,k,it.id);
+    if(e && num(e.w)!=null) return {week:p, e};
+  }
+  return null;
+}
+function suggestion(w,k,it){
+  const prev = prevLog(w,k,it);
+  if(!prev) return {cls:'', txt:'Primera vez: elige un peso con el que llegues al rango dejando 1–2 reps en recámara.'};
+  const e=prev.e, kg=num(e.w), reps=(e.r||[]).map(num).filter(x=>x!=null);
+  const hist = `Sem. ${prev.week}: ${fmtN(kg)} kg · ${reps.length?reps.join('/'):'sin reps'}`;
+  if(isDeload(w)) return {cls:'', txt:`${hist}. Descarga → usa ~${fmtN(Math.round(kg*0.7/it.inc)*it.inc)} kg y haz una serie menos.`};
+  if(reps.length>=it.sets && reps.slice(0,it.sets).every(r=>r>=it.max))
+    return {cls:'up', txt:`${hist}. ✅ Completaste el rango → sube a ${fmtN(kg+it.inc)} kg.`};
+  if(reps.some(r=>r<it.min))
+    return {cls:'', txt:`${hist}. Mantén ${fmtN(kg)} kg hasta llegar a ${it.min} reps en todas las series.`};
+  return {cls:'', txt:`${hist}. Mismo peso, intenta +1 rep en alguna serie.`};
+}
+
+/* ============================================================
+   RENDER: SEMANA
+   ============================================================ */
+function ringSVG(done,total){
+  const r=17,c=2*Math.PI*r,p=total?done/total:0;
+  return `<svg class="ring" viewBox="0 0 42 42"><circle cx="21" cy="21" r="${r}" fill="none" stroke="var(--line)" stroke-width="4"/>
+  <circle cx="21" cy="21" r="${r}" fill="none" stroke="${p>=1?'var(--good)':'var(--accent)'}" stroke-width="4" stroke-linecap="round"
+   stroke-dasharray="${c*p} ${c}" transform="rotate(-90 21 21)"/>
+  <text x="21" y="25" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">${done}/${total}</text></svg>`;
+}
+function sessProgress(w,k){
+  const items=SESSIONS[k].items, s=S.weeks[String(w)]&&S.weeks[String(w)].s[k];
+  const done=items.filter(it=>s&&s.ex[it.id]&&s.ex[it.id].done).length;
+  return [done,items.length];
+}
+function hipBox(s){
+  const d=num(s.hipD), n=num(s.hipN); if(d==null&&n==null) return '';
+  const m=Math.max(d||0,n||0);
+  if(m<=2) return `<div class="hipbox ok">🟢 <b>Cadera bien (${m}/10).</b> Sigue la progresión.</div>`;
+  if(m<=5) return `<div class="hipbox mid">🟡 <b>Molestia moderada (${m}/10).</b> Aceptable si a las 24 h vuelve a ≤2. Si no, repite esta semana sin subir km ni peso.</div>`;
+  return `<div class="hipbox bad">🔴 <b>Dolor alto (${m}/10).</b> No subas carga, cambia carrera por elíptica y coméntalo con tu fisio si persiste.</div>`;
+}
+
+function renderSemana(){
+  const w=S.week, auto=currentWeekFromStart(), x=W(w);
+  const km=RUN_KM[w];
+  let h=`<div class="weeknav">
+    <button data-act="prev" aria-label="Semana anterior">‹</button>
+    <div class="wk"><b>Semana ${w} de ${TOTAL_WEEKS}</b>
+      ${isDeload(w)?'<span class="pill deload">Descarga</span> ':''}${auto===w?'<span class="pill now">Esta semana</span>':''}
+      ${auto && auto!==w?`<button class="linkbtn" data-act="gonow">Ir a la semana actual (${auto})</button>`:''}
+    </div>
+    <button data-act="next" aria-label="Semana siguiente">›</button>
   </div>
+  <div class="card">
+    <div class="target">
+      <div><span class="small muted">Carrera principal</span><span class="big">${fmtKm(km)} km</span><span class="small t2">~${Math.round(km*EASY_MIN)}–${Math.round(km*EASY_MAX)} min fáciles</span></div>
+      <div><span class="small muted">Gimnasio</span><span class="big">${isDeload(w)?'−30 %':'Progresa'}</span><span class="small t2">${isDeload(w)?'~70 % del peso, 1 serie menos':'Doble progresión (reps → peso)'}</span></div>
+    </div>
+    <div class="meta">
+      <div class="fld"><label>Peso corporal (kg, en ayunas)</label><input inputmode="decimal" data-k="bw" value="${esc(x.bw)}" placeholder="65"></div>
+      <div class="fld"><label>Orden recomendado</label><div class="small t2" style="padding-top:4px">A → B → C con 1 día libre entre sesiones. <b>Nunca C el día antes de B.</b></div></div>
+    </div>
+  </div>`;
+  for(const k of ['A','B','C']) h+=renderSess(w,k);
+  h+=`<div class="card"><div class="fld"><label>Notas de la semana (sueño, estrés, cómo te has visto)</label>
+    <textarea data-k="wnotes" placeholder="Ej.: semana dura en el trabajo, dormí poco…">${esc(x.notes)}</textarea></div>
+    <button class="btn primary" data-act="summary">📋 Copiar resumen semanal para tu entrenador</button></div>`;
+  $('#tab-semana').innerHTML=h;
+}
 
-  <div id="workout-container"></div>
+function renderSess(w,k){
+  const def=SESSIONS[k], s=Sess(w,k), [d,t]=sessProgress(w,k), key=w+k, open=ui.open[key];
+  let h=`<div class="card sess ${open?'open':''}" data-sess="${k}">
+   <button class="sess-h" data-act="toggle" data-key="${key}">
+     <span id="ring-${k}">${ringSVG(d,t)}</span>
+     <span class="ttl"><b>${def.title} · ${def.sub}</b><span class="small muted">${s.date?'Hecha el '+fmtDate(s.date):'Pendiente'}</span></span>
+     <span class="chev">›</span>
+   </button><div class="sess-b">`;
+  for(const it of def.items) h+=renderItem(w,k,it);
+  h+=`<div class="meta">
+    <div class="fld"><label>Fecha</label><input type="date" data-k="s.date" value="${esc(s.date)}"></div>
+    <div class="fld"><label>Esfuerzo sesión (RPE 1–10)</label><input inputmode="numeric" data-k="s.rpe" value="${esc(s.rpe)}" placeholder="7"></div>
+    <div class="fld"><label>Cadera durante (0–10)</label><input inputmode="numeric" data-k="s.hipD" value="${esc(s.hipD)}" placeholder="0"></div>
+    <div class="fld"><label>Cadera a las 24 h (0–10)</label><input inputmode="numeric" data-k="s.hipN" value="${esc(s.hipN)}" placeholder="0"></div>
+  </div>
+  <div id="hip-${k}">${hipBox(s)}</div>
+  <div class="fld" style="margin-top:8px"><label>Sensaciones / notas</label><textarea data-k="s.notes" placeholder="Cómo te has encontrado…">${esc(s.notes)}</textarea></div>
+  </div></div>`;
+  return h;
+}
 
-  <button class="reset-btn" onclick="clearCurrentWeek()">Borrar registros de esta semana</button>
+function renderItem(w,k,it){
+  const e=Ex(w,k,it.id);
+  const detail = typeof it.detail==='function'? it.detail(w) : it.detail;
+  let det = it.type==='str' ? `${isDeload(w)?it.sets-1:it.sets} series × ${it.min===it.max?it.min:it.min+'–'+it.max} ${it.unit||'reps'} · descanso ${it.min>=12?'60':'90'} s` : detail;
+  let body='';
+  if(it.type==='str'){
+    const sg=suggestion(w,k,it), n=it.sets;
+    body+=`<div class="hint ${sg.cls}">${sg.txt}</div>
+     <div class="sets">
+      <div class="fld"><label>Kg</label><input inputmode="decimal" data-k="e.w" value="${esc(e.w)}" placeholder="kg"></div>`;
+    for(let i=0;i<n;i++) body+=`<div class="fld"><label>S${i+1}</label><input inputmode="numeric" data-k="e.r.${i}" value="${esc((e.r||[])[i])}" placeholder="${it.max}"></div>`;
+    body+=`</div>`;
+  } else if(it.type==='cardio'){
+    body+=`<div class="cardio">
+      <div class="fld"><label>Km</label><input inputmode="decimal" data-k="e.km" value="${esc(e.km)}" placeholder="0,0"></div>
+      <div class="fld"><label>Minutos</label><input inputmode="decimal" data-k="e.min" value="${esc(e.min)}" placeholder="0"></div>
+      <div class="fld"><label>Ppm media</label><input inputmode="numeric" data-k="e.ppm" value="${esc(e.ppm)}" placeholder="135"></div>
+    </div><div class="pace" id="pace-${k}-${it.id}">${pace(e.km,e.min)?'Ritmo: '+pace(e.km,e.min):''}</div>`;
+  }
+  const tk=it.id, show=ui.tech[tk];
+  body+=`<button class="linkbtn" data-act="tech" data-id="${tk}">${show?'Ocultar técnica':'📸 Ver técnica'}</button>
+   <div class="tech ${show?'show':''}" id="tech-${tk}">${show?techHTML(it):''}</div>`;
+  return `<div class="ex ${e.done?'done':''}" data-ex="${it.id}">
+    <div class="ex-h"><div class="nm"><b>${it.name}</b>${it.isNew?'<span class="tag">NUEVO</span>':''}<div class="det">${det}</div></div>
+    <button class="chk" data-act="done" aria-label="Marcar hecho">✓</button></div>${body}</div>`;
+}
+function techHTML(it){
+  return `<div class="frames"><img src="${IMG}${it.img}/0.jpg" alt="${esc(it.name)} inicio" onerror="this.parentNode.style.display='none'">
+     <img class="b" src="${IMG}${it.img}/1.jpg" alt="${esc(it.name)} final" onerror="this.remove()"><span class="lbl">Inicio ↔ final</span></div>
+    <ul>${(it.cues||[]).map(c=>`<li>${c}</li>`).join('')}</ul>${it.hip?`<div class="hip">🦴 ${it.hip}</div>`:''}`;
+}
 
-  <script>
-    const runProgression = {
-      1: "OBJETIVO: Carrera continua suave 5 km a ritmo cómodo (~35 min). P.P.M. objetivo: 120-135.",
-      2: "OBJETIVO: Carrera continua suave 5 km a ritmo cómodo (~35 min). Consolida sensaciones.",
-      3: "OBJETIVO: Carrera continua suave 6 km a ritmo cómodo (~42 min). P.P.M. objetivo: 120-135.",
-      4: "OBJETIVO: Carrera continua suave 6 km a ritmo cómodo (~42 min). Controla articulaciones.",
-      5: "OBJETIVO: Carrera continua suave 7 km a ritmo cómodo (~49 min). P.P.M. objetivo: 125-140.",
-      6: "OBJETIVO: Carrera continua suave 7 km a ritmo cómodo (~49 min). Foco en cadera sin molestias.",
-      7: "OBJETIVO: Carrera continua suave 8 km a ritmo cómodo (~56 min). P.P.M. objetivo: 125-140.",
-      8: "OBJETIVO: Carrera continua suave 8 km a ritmo cómodo (~56 min). Mantenlo fluido.",
-      9: "OBJETIVO DESCARGA: Trote muy suave 4 km (~28 min) para recuperar cadera y descargar.",
-      10: "OBJETIVO: Carrera continua suave 9 km a ritmo cómodo (~63 min). P.P.M. objetivo: 125-140.",
-      11: "OBJETIVO: Carrera continua suave 9 km a ritmo cómodo (~63 min). Último escalón antes de los 10K.",
-      12: "OBJETIVO FINAL: 10 km continuos a ritmo controlado (~70 min). ¡A por ello!"
-    };
+/* ============================================================
+   EVENTOS (delegados)
+   ============================================================ */
+function findItem(k,id){ return SESSIONS[k].items.find(i=>i.id===id); }
+let saveT;
+function saveSoon(){ clearTimeout(saveT); saveT=setTimeout(persist,250); }
 
-    const workoutData = [
-      {
-        dayGroup: 1,
-        day: "Día 1: Gimnasio (Torso Hipertrofia + Cardio)",
-        exercises: [
-          { id: "d1_e1", name: "Press de Banca Plano", details: "4 series × 8-10 reps", imgSearch: "bench+press", isCardio: false },
-          { id: "d1_e2", name: "Remo Gironda / Polea Baja", details: "4 series × 10-12 reps", imgSearch: "seated+cable+row", isCardio: false },
-          { id: "d1_e3", name: "Press Militar con Mancuernas", details: "3 series × 10-12 reps", imgSearch: "dumbbell+shoulder+press", isCardio: false },
-          { id: "d1_e4", name: "Jalón al Pecho", details: "3 series × 10-12 reps", imgSearch: "lat+pulldown", isCardio: false },
-          { id: "d1_e5", name: "Elevaciones Laterales", details: "3 series × 12-15 reps", imgSearch: "lateral+raise", isCardio: false },
-          { id: "d1_e6", name: "Superserie Bíceps + Tríceps en Polea", details: "3 series × 12 reps", imgSearch: "triceps+pushdown", isCardio: false },
-          { id: "d1_e7", name: "Cardio Final (Elíptica / Bici)", details: "15-20 min ritmo constante", imgSearch: "elliptical+trainer", isCardio: true }
-        ]
-      },
-      {
-        dayGroup: 2,
-        day: "Día 2: Cardio / Carrera (Progresión a 10K)",
-        exercises: [
-          { id: "d2_e1", name: "Calentamiento: Caminata Ligera", details: "5 minutos a paso vivo", imgSearch: "walking", isCardio: true },
-          { id: "d2_e2", name: "Carrera Principal (Prescrita por Entrenador)", details: "", imgSearch: "running", isCardio: true },
-          { id: "d2_e3", name: "Opción Gimnasio (Si no es posible correr)", details: "20 min Elíptica + 15 min Bici estática en Zona 2", imgSearch: "stationary+bike", isCardio: true },
-          { id: "d2_e4", name: "Vuelta a la calma / Estiramientos", details: "5-10 min de caminata e higiene articular", imgSearch: "stretching", isCardio: true }
-        ]
-      },
-      {
-        dayGroup: 3,
-        day: "Día 3: Gimnasio (Pierna Adaptada + Torso)",
-        exercises: [
-          { id: "d3_e1", name: "Prensa de Piernas (Rango cómodo)", details: "4 series × 10-12 reps", imgSearch: "leg+press", isCardio: false },
-          { id: "d3_e2", name: "Peso Muerto Rumano con Mancuernas", details: "3 series × 10 reps", imgSearch: "romanian+deadlift", isCardio: false },
-          { id: "d3_e3", name: "Curl Femoral en Máquina", details: "3 series × 12 reps", imgSearch: "lying+leg+curl", isCardio: false },
-          { id: "d3_e4", name: "Puente de Glúteo / Hip Thrust", details: "3 series × 12 reps", imgSearch: "hip+thrust", isCardio: false },
-          { id: "d3_e5", name: "Contractora / Aberturas Máquina", details: "3 series × 12 reps", imgSearch: "chest+fly+machine", isCardio: false },
-          { id: "d3_e6", name: "Remo Unilateral con Mancuerna", details: "3 series × 10-12 reps", imgSearch: "dumbbell+row", isCardio: false },
-          { id: "d3_e7", name: "Paseo del Granjero (Farmer Carry)", details: "3 series × 40 metros", imgSearch: "farmers+walk", isCardio: false }
-        ]
-      }
-    ];
+document.addEventListener('input', ev=>{
+  const el=ev.target, k=el.dataset.k; if(!k) return;
+  const w=S.week, x=W(w), v=el.value;
+  if(k==='bw'){ x.bw=v; }
+  else if(k==='wnotes'){ x.notes=v; }
+  else if(k.startsWith('s.')){
+    const sk=el.closest('[data-sess]').dataset.sess, s=Sess(w,sk);
+    s[k.slice(2)]=v;
+    if(k==='s.hipD'||k==='s.hipN') $('#hip-'+sk).innerHTML=hipBox(s);
+  }
+  else if(k.startsWith('e.')){
+    const sk=el.closest('[data-sess]').dataset.sess, id=el.closest('[data-ex]').dataset.ex, e=Ex(w,sk,id), s=Sess(w,sk);
+    const f=k.slice(2);
+    if(f.startsWith('r.')){ const i=+f.slice(2); e.r=e.r||[]; e.r[i]=v; }
+    else e[f]=v;
+    if(f==='km'||f==='min'){ const p=pace(e.km,e.min); $('#pace-'+sk+'-'+id).textContent=p?'Ritmo: '+p:''; }
+    if(!s.date){ s.date=today(); const d=el.closest('[data-sess]').querySelector('[data-k="s.date"]'); if(d) d.value=s.date; }
+  }
+  else if(k==='startDate'){ S.startDate=v; const a=currentWeekFromStart(); if(a) S.week=a; }
+  saveSoon();
+});
 
-    function getCurrentWeek() {
-      return localStorage.getItem("appCurrentWeek_v9") || "1";
+document.addEventListener('click', ev=>{
+  const b=ev.target.closest('[data-act],[data-tab],[data-t]'); if(!b) return;
+  if(b.dataset.tab){ setTab(b.dataset.tab); return; }
+  if(b.dataset.t){ startTimer(+b.dataset.t); return; }
+  const a=b.dataset.act, w=S.week;
+  if(a==='prev'&&w>1){ S.week--; persist(); renderSemana(); window.scrollTo(0,0); }
+  else if(a==='next'&&w<TOTAL_WEEKS){ S.week++; persist(); renderSemana(); window.scrollTo(0,0); }
+  else if(a==='gonow'){ S.week=currentWeekFromStart(); persist(); renderSemana(); }
+  else if(a==='toggle'){ const c=b.closest('.sess'); c.classList.toggle('open'); ui.open[b.dataset.key]=c.classList.contains('open'); }
+  else if(a==='done'){
+    const card=b.closest('[data-sess]'), sk=card.dataset.sess, id=b.closest('[data-ex]').dataset.ex, e=Ex(w,sk,id), s=Sess(w,sk);
+    e.done=!e.done; b.closest('.ex').classList.toggle('done',e.done);
+    if(e.done && !s.date){ s.date=today(); const d=card.querySelector('[data-k="s.date"]'); if(d) d.value=s.date; card.querySelector('.ttl .small').textContent='Hecha el '+fmtDate(s.date); }
+    const [d,t]=sessProgress(w,sk); $('#ring-'+sk).innerHTML=ringSVG(d,t);
+    if(d===t) toast('¡Sesión '+sk+' completada! 💪');
+    persist();
+  }
+  else if(a==='tech'){
+    const id=b.dataset.id, sk=b.closest('[data-sess]').dataset.sess, box=$('#tech-'+id);
+    ui.tech[id]=!ui.tech[id];
+    box.innerHTML=ui.tech[id]?techHTML(findItem(sk,id)):''; box.classList.toggle('show',ui.tech[id]);
+    b.textContent=ui.tech[id]?'Ocultar técnica':'📸 Ver técnica';
+  }
+  else if(a==='summary'){ copyText(buildSummary(w)); }
+  else if(a==='export'){ exportData(); }
+  else if(a==='copyjson'){ copyText(JSON.stringify(S)); }
+  else if(a==='importtxt'){ importData($('#imptxt').value); }
+  else if(a==='wipe'){ if(confirm('¿Borrar TODOS los datos? No se puede deshacer.')){ S={v:1,startDate:'',week:1,weeks:{}}; persist(); renderAll(); toast('Datos borrados'); } }
+  else if(a==='exsel'){ /* handled by change */ }
+});
+document.addEventListener('change', ev=>{
+  if(ev.target.id==='exSel'){ ui.chartEx=ev.target.value; renderProgreso(); }
+  if(ev.target.id==='impfile'){ const f=ev.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>importData(r.result); r.readAsText(f); }
+  if(ev.target.dataset.k==='startDate'){ renderSemana(); renderDatos(); }
+});
+window.addEventListener('pagehide', persist);
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) persist(); });
+
+function setTab(t){
+  ui.tab=t;
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+  ['semana','progreso','plan','datos'].forEach(n=>$('#tab-'+n).classList.toggle('hidden',n!==t));
+  $('#timer').classList.toggle('hidden', t!=='semana');
+  if(t==='progreso') renderProgreso();
+  if(t==='datos') renderDatos();
+  if(t==='semana') renderSemana();
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   TEMPORIZADOR DE DESCANSO
+   ============================================================ */
+let tEnd=0, tInt=null, actx=null;
+function beep(){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.25,0.5].forEach(o=>{ const os=actx.createOscillator(), g=actx.createGain(); os.frequency.value=880; os.connect(g); g.connect(actx.destination);
+      g.gain.setValueAtTime(0.25,actx.currentTime+o); g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+o+0.2); os.start(actx.currentTime+o); os.stop(actx.currentTime+o+0.2); });
+  }catch(e){}
+  if(navigator.vibrate) navigator.vibrate([200,100,200]);
+}
+function startTimer(sec){
+  try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }catch(e){}
+  tEnd=Date.now()+sec*1000; clearInterval(tInt); tick(); tInt=setInterval(tick,250);
+}
+function tick(){
+  const left=Math.max(0,Math.ceil((tEnd-Date.now())/1000)), c=$('#clock');
+  c.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0'); c.classList.toggle('run',left>0);
+  if(left<=0){ clearInterval(tInt); tInt=null; if(tEnd) { beep(); toast('¡A por la siguiente serie!'); } tEnd=0; }
+}
+$('#tstop').onclick=()=>{ clearInterval(tInt); tInt=null; tEnd=0; $('#clock').textContent='0:00'; $('#clock').classList.remove('run'); };
+
+/* ============================================================
+   RESUMEN SEMANAL
+   ============================================================ */
+function buildSummary(w){
+  const x=W(w); let t=`SEMANA ${w}/${TOTAL_WEEKS}${isDeload(w)?' (DESCARGA)':''} · Objetivo carrera: ${fmtKm(RUN_KM[w])} km\n`;
+  if(x.bw) t+=`Peso corporal: ${x.bw} kg\n`;
+  for(const k of ['A','B','C']){
+    const def=SESSIONS[k], s=Sess(w,k), [d,tt]=sessProgress(w,k);
+    t+=`\n${def.title} · ${def.sub} — ${s.date?fmtDate(s.date):'no hecha'} (${d}/${tt})`;
+    const extra=[]; if(s.rpe) extra.push('RPE '+s.rpe); if(s.hipD) extra.push('cadera durante '+s.hipD+'/10'); if(s.hipN) extra.push('cadera 24h '+s.hipN+'/10');
+    if(extra.length) t+=` · ${extra.join(' · ')}`;
+    t+='\n';
+    for(const it of def.items){
+      const e=peekEx(w,k,it.id); if(!e) continue;
+      if(it.type==='str' && (e.w||(e.r||[]).some(Boolean))) t+=`- ${it.name}: ${e.w||'?'} kg · ${(e.r||[]).filter(v=>v!==''&&v!=null).join('/')||'-'}\n`;
+      else if(it.type==='cardio' && (e.km||e.min||e.ppm)) t+=`- ${it.name}: ${e.km||'?'} km · ${e.min||'?'} min${pace(e.km,e.min)?' ('+pace(e.km,e.min)+')':''}${e.ppm?' · '+e.ppm+' ppm':''}\n`;
+      else if(it.type==='check' && e.done) t+=`- ${it.name}: hecho\n`;
     }
+    if(s.notes) t+=`Notas: ${s.notes}\n`;
+  }
+  if(x.notes) t+=`\nNotas de la semana: ${x.notes}\n`;
+  return t;
+}
+function copyText(t){
+  const done=()=>toast('Copiado al portapapeles');
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(t).then(done,()=>fallbackCopy(t)); }
+  else fallbackCopy(t);
+}
+function fallbackCopy(t){
+  const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+  ta.focus(); ta.select(); try{ document.execCommand('copy'); toast('Copiado al portapapeles'); }catch(e){ alert(t); } ta.remove();
+}
 
-    function renderWorkout() {
-      const container = document.getElementById("workout-container");
-      container.innerHTML = "";
-      
-      const currentWeek = getCurrentWeek();
-      document.getElementById("weekSelect").value = currentWeek;
+/* ============================================================
+   PROGRESO (gráficas SVG)
+   ============================================================ */
+function lineChart(id, pts, o){
+  // pts: [{x:week, y:value, label}]  o: {unit, ref:[{x,y}], fmt, invert}
+  const el=document.getElementById(id); if(!el) return;
+  const valid=pts.filter(p=>p.y!=null);
+  if(!valid.length){ el.innerHTML='<div class="empty">Aún no hay datos. Se irá llenando semana a semana.</div>'; return; }
+  const Wd=340,H=170,L=34,R=10,T=12,B=24;
+  const ys=valid.map(p=>p.y).concat((o.ref||[]).map(p=>p.y));
+  let mn=Math.min(...ys), mx=Math.max(...ys); if(o.minSpan && mx-mn<o.minSpan){ const c=(mx+mn)/2; mn=c-o.minSpan/2; mx=c+o.minSpan/2; } if(mn===mx){ mn-=1; mx+=1; } const pad=(mx-mn)*0.12; mn-=pad; mx+=pad;
+  if(o.zero) mn=Math.min(0,mn);
+  const X=x=>L+(x-1)/(TOTAL_WEEKS-1)*(Wd-L-R), Y=y=>o.invert? T+(y-mn)/(mx-mn)*(H-T-B) : H-B-(y-mn)/(mx-mn)*(H-T-B);
+  const f=o.fmt||(v=>fmtN(v));
+  let g='';
+  for(let i=0;i<=3;i++){ const v=mn+(mx-mn)*i/3, yy=Y(v); g+=`<line x1="${L}" x2="${Wd-R}" y1="${yy}" y2="${yy}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${yy+4}" text-anchor="end" font-size="10" fill="var(--muted)">${f(v)}</text>`; }
+  for(let w=1;w<=TOTAL_WEEKS;w++) if(w===1||w%2===0) g+=`<text x="${X(w)}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--muted)">S${w}</text>`;
+  if(o.ref){ g+=`<polyline fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4" points="${o.ref.map(p=>X(p.x)+','+Y(p.y)).join(' ')}"/>`;
+    const lr=o.ref[o.ref.length-1]; g+=`<text x="${X(lr.x)}" y="${Y(lr.y)-7}" text-anchor="end" font-size="10" fill="var(--muted)">objetivo</text>`; }
+  const segs=[]; let cur=[]; pts.forEach(p=>{ if(p.y==null){ if(cur.length) segs.push(cur); cur=[]; } else cur.push(p); }); if(cur.length) segs.push(cur);
+  segs.forEach(sg=>{ g+=`<polyline fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${sg.map(p=>X(p.x)+','+Y(p.y)).join(' ')}"/>`; });
+  valid.forEach(p=>{ g+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>`; });
+  g+=`<rect x="${L}" y="0" width="${Wd-L-R}" height="${H}" fill="transparent" class="hit"/>`;
+  el.innerHTML=`<svg viewBox="0 0 ${Wd} ${H}" role="img" aria-label="${esc(o.title||'')}">${g}</svg><div class="tip"></div>`;
+  const svg=el.querySelector('svg'), tip=el.querySelector('.tip');
+  const show=ev=>{
+    const r=svg.getBoundingClientRect(), cx=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*Wd/r.width;
+    let best=null,bd=1e9; valid.forEach(p=>{ const d=Math.abs(X(p.x)-cx); if(d<bd){bd=d;best=p;} });
+    if(!best) return; tip.style.display='block'; tip.style.left=(X(best.x)*r.width/Wd)+'px'; tip.style.top=(Y(best.y)*r.width/Wd)+'px';
+    tip.textContent=`S${best.x}: ${best.label||f(best.y)+' '+(o.unit||'')}`;
+  };
+  svg.addEventListener('mousemove',show); svg.addEventListener('touchstart',show,{passive:true}); svg.addEventListener('touchmove',show,{passive:true});
+  svg.addEventListener('mouseleave',()=>tip.style.display='none');
+}
+function fmtPace(v){ const m=Math.floor(v), s=Math.round((v-m)*60); return m+':'+String(s===60?0:s).padStart(2,'0'); }
 
-      const savedState = JSON.parse(localStorage.getItem(`workoutState_w${currentWeek}_v9`) || "{}");
-      const savedLogs = JSON.parse(localStorage.getItem(`workoutLogs_w${currentWeek}_v9`) || "{}");
+function renderProgreso(){
+  const strItems=[]; for(const k of ['A','C']) SESSIONS[k].items.filter(i=>i.type==='str').forEach(i=>strItems.push({k,i}));
+  const sel=strItems.find(s=>s.i.id===ui.chartEx)||strItems[0];
+  const weeks=[...Array(TOTAL_WEEKS)].map((_,i)=>i+1);
+  const run=weeks.map(w=>{ const e=peekEx(w,'B','b1'); return {x:w,y:e?num(e.km):null}; });
+  const pc=weeks.map(w=>{ const e=peekEx(w,'B','b1'); const v=e?paceVal(e.km,e.min):null; return {x:w,y:v,label:v?fmtPace(v)+' min/km':''}; });
+  const lift=weeks.map(w=>{ const e=peekEx(w,sel.k,sel.i.id); return {x:w,y:e?num(e.w):null}; });
+  const bw=weeks.map(w=>({x:w,y:S.weeks[w]?num(S.weeks[w].bw):null}));
+  const hip=weeks.map(w=>{ const x=S.weeks[w]; if(!x) return {x:w,y:null}; const v=['A','B','C'].flatMap(k=>x.s[k]?[num(x.s[k].hipD),num(x.s[k].hipN)]:[]).filter(v=>v!=null); return {x:w,y:v.length?Math.max(...v):null}; });
+  const last=a=>{ const v=a.filter(p=>p.y!=null); return v.length?v[v.length-1]:null; };
+  const lr=last(run), lp=last(pc), ll=last(lift), lb=last(bw);
+  // Resumen de sesiones hechas
+  let done=0; weeks.forEach(w=>['A','B','C'].forEach(k=>{ const [d,t]=sessProgress(w,k); if(d>0) done++; }));
+  $('#tab-progreso').innerHTML=`
+   <div class="card"><div class="target" style="margin-top:0">
+     <div><span class="small muted">Sesiones registradas</span><span class="big">${done}<span class="small muted"> / 36</span></span></div>
+     <div><span class="small muted">Carrera más larga</span><span class="big">${Math.max(0,...run.map(p=>p.y||0))?fmtN(Math.max(...run.map(p=>p.y||0)))+' km':'—'}</span></div>
+   </div></div>
+   <div class="card"><div class="chart-h"><h3>Carrera principal (km)</h3><span class="last">${lr?'S'+lr.x+': '+fmtN(lr.y)+' km':''}</span></div><div class="chart" id="ch-run"></div></div>
+   <div class="card"><div class="chart-h"><h3>Ritmo de la carrera (min/km)</h3><span class="last">${lp?'S'+lp.x+': '+lp.label:''}</span></div>
+     <div class="small muted">Más arriba = más rápido. En zona 2 debería mejorar solo, sin forzar.</div><div class="chart" id="ch-pace"></div></div>
+   <div class="card"><div class="chart-h"><h3>Fuerza (kg)</h3><span class="last">${ll?'S'+ll.x+': '+fmtN(ll.y)+' kg':''}</span></div>
+     <select id="exSel" style="margin:8px 0">${strItems.map(s=>`<option value="${s.i.id}" ${s.i.id===sel.i.id?'selected':''}>${s.k} · ${s.i.name}</option>`).join('')}</select>
+     <div class="chart" id="ch-lift"></div></div>
+   <div class="card"><div class="chart-h"><h3>Peso corporal (kg)</h3><span class="last">${lb?'S'+lb.x+': '+fmtN(lb.y)+' kg':''}</span></div>
+     <div class="small muted">Objetivo: subir ~0,25–0,5 kg al mes.</div><div class="chart" id="ch-bw"></div></div>
+   <div class="card"><div class="chart-h"><h3>Cadera: máximo semanal (0–10)</h3></div>
+     <div class="small muted">0–2 bien · 3–5 vigilar · &gt;5 parar y revisar.</div><div class="chart" id="ch-hip"></div></div>
+   <div class="card"><h3 style="margin:0 0 6px;font-size:15px">Tabla de carrera</h3>
+     <table><tr><th>Sem.</th><th class="num">Objetivo</th><th class="num">Real</th><th class="num">Ritmo</th><th class="num">Ppm</th></tr>
+     ${weeks.map(w=>{ const e=peekEx(w,'B','b1')||{}; return `<tr><td>S${w}${isDeload(w)?' ⬇︎':''}</td><td class="num">${fmtKm(RUN_KM[w])}</td><td class="num">${e.km?esc(e.km):'—'}</td><td class="num">${pace(e.km,e.min).replace(' min/km','')||'—'}</td><td class="num">${e.ppm?esc(e.ppm):'—'}</td></tr>`; }).join('')}
+     </table></div>`;
+  lineChart('ch-run',run,{unit:'km',ref:weeks.map(w=>({x:w,y:RUN_KM[w]})),zero:true,title:'Kilómetros'});
+  lineChart('ch-pace',pc,{unit:'min/km',fmt:fmtPace,invert:true,minSpan:1,title:'Ritmo'});
+  lineChart('ch-lift',lift,{unit:'kg',minSpan:10,title:sel.i.name});
+  lineChart('ch-bw',bw,{unit:'kg',minSpan:3,title:'Peso corporal'});
+  lineChart('ch-hip',hip,{unit:'/10',zero:true,minSpan:6,fmt:v=>Math.round(v),title:'Cadera'});
+}
 
-      // Actualizar la indicación de la carrera del Día 2
-      workoutData[1].exercises[1].details = runProgression[currentWeek] || runProgression[1];
+/* ============================================================
+   PLAN (guía)
+   ============================================================ */
+function renderPlan(){
+  $('#tab-plan').innerHTML=`
+  <div class="card"><h2>Tu plan en 30 segundos</h2>
+   <p><b>Objetivo:</b> ganar músculo y correr 10 km cómodo en 12 semanas, protegiendo la cadera izquierda (choque femoroacetabular + sutura de labrum hace +15 años).</p>
+   <ul><li><b>3 sesiones/semana</b> en el orden que te cuadre: A (torso), B (carrera), C (pierna).</li>
+   <li><b>Regla de oro:</b> nunca pierna (C) el día antes de correr (B). Ideal: 48 h entre C y B.</li>
+   <li><b>Semana 8 = descarga</b>: gimnasio al ~70 % y carrera corta. Luego subes con más fuerza.</li></ul></div>
 
-      workoutData.forEach(group => {
-        const card = document.createElement("div");
-        card.className = "day-card";
+  <div class="card"><h2>Cómo progresar en el gimnasio</h2>
+   <p><b>Doble progresión:</b> trabaja dentro del rango de reps (p. ej. 8–10). Cuando hagas el máximo del rango en <i>todas</i> las series, sube el peso lo mínimo (1–2 kg mancuernas, 2,5–5 kg máquinas/barra). La app te lo sugiere automáticamente comparando con la semana anterior.</p>
+   <p><b>Intensidad:</b> termina cada serie con 1–2 reps en recámara (RIR 1–2). No hace falta llegar al fallo; con la cadera, el fallo técnico en prensa o peso muerto es mala idea.</p>
+   <p><b>Descansos:</b> 90 s en básicos, 60 s en accesorios. Usa el temporizador de abajo.</p></div>
 
-        let html = `<h2 class="day-title">${group.day}</h2>`;
-        
-        group.exercises.forEach(ex => {
-          const isChecked = savedState[ex.id] || false;
-          const logData = savedLogs[ex.id] || { field1: "", field2: "", field3: "" };
-          const imgUrl = `https://www.google.com/search?tbm=isch&q=${ex.imgSearch}+exercise+form`;
-          
-          let inputHTML = "";
-          if (ex.isCardio) {
-            // Cardio: Distancia, Tiempo y PPM/Sensaciones
-            inputHTML = `
-              <div class="log-inputs">
-                <input type="text" placeholder="Distancia (ej: 5 km / 3 km)" value="${logData.field1 || ''}" onchange="saveLog('${ex.id}', 'field1', this.value)">
-                <input type="text" placeholder="Tiempo (ej: 35 min)" value="${logData.field2 || ''}" onchange="saveLog('${ex.id}', 'field2', this.value)">
-                <input type="text" placeholder="PPM / Cadera ok?" value="${logData.field3 || ''}" onchange="saveLog('${ex.id}', 'field3', this.value)">
-              </div>
-            `;
-          } else {
-            // Fuerza: Pesos y Repeticiones
-            inputHTML = `
-              <div class="log-inputs">
-                <input type="text" placeholder="Peso (ej: 22 kg)" value="${logData.field1 || ''}" onchange="saveLog('${ex.id}', 'field1', this.value)">
-                <input type="text" placeholder="Reps (ej: 10,10,9)" value="${logData.field2 || ''}" onchange="saveLog('${ex.id}', 'field2', this.value)">
-              </div>
-            `;
-          }
+  <div class="card"><h2>Cómo progresar en la carrera</h2>
+   <table><tr><th>Semanas</th><th class="num">Km</th><th>Nota</th></tr>
+   <tr><td>1–2</td><td class="num">5</td><td>Base (ritmo más lento que tu 7:00 actual)</td></tr>
+   <tr><td>3–4</td><td class="num">5,5 → 6</td><td>+0,5 km/semana</td></tr>
+   <tr><td>5–7</td><td class="num">6,5 → 7,5</td><td>Empieza trote corto en sesión A</td></tr>
+   <tr><td>8</td><td class="num">5</td><td>Descarga</td></tr>
+   <tr><td>9–11</td><td class="num">8 → 9</td><td>+0,5 km/semana</td></tr>
+   <tr><td>12</td><td class="num">10</td><td>¡Objetivo!</td></tr></table>
+   <p>Hoy haces 5 km en 35 min (7:00/km), pero eso es tu ritmo “apretando”. Para llegar a 10 km <i>sin cansarte</i>, los rodajes van a <b>7:15–7:45/km</b> o al ritmo que te deje hablar. El tiempo no es el objetivo; la distancia y las sensaciones sí.</p>
+   <h3>Semáforo de la cadera (0–10)</h3>
+   <ul><li>🟢 0–2: sigue el plan.</li><li>🟡 3–5: aceptable si a las 24 h vuelve a ≤2. Si no, repite semana.</li><li>🔴 &gt;5 o empeora de semana en semana: no subas, cambia carrera por elíptica y consulta al fisio.</li></ul></div>
 
-          html += `
-            <div class="exercise-item ${isChecked ? 'completed' : ''}">
-              <div class="exercise-main">
-                <div class="exercise-info">
-                  <span class="exercise-name">${ex.name}</span>
-                  <span class="exercise-details">${ex.details}</span>
-                </div>
-                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleExercise('${ex.id}', this)">
-              </div>
-              
-              ${inputHTML}
+  <div class="card"><h2>Nutrición (65 kg · 172 cm · 37 años)</h2>
+   <table><tr><th>Macro</th><th class="num">Gramos/día</th><th class="num">kcal</th></tr>
+   <tr><td>Proteína (1,9 g/kg)</td><td class="num">~125</td><td class="num">500</td></tr>
+   <tr><td>Hidratos</td><td class="num">~310</td><td class="num">1.240</td></tr>
+   <tr><td>Grasas</td><td class="num">~70</td><td class="num">630</td></tr>
+   <tr><th>Total</th><th></th><th class="num">~2.370</th></tr></table>
+   <ul><li>Reparte la proteína en 4–5 tomas de 25–30 g.</li>
+   <li>Hidratos complejos 2–3 h antes de correr. En las tiradas de 60+ min (semanas 10–12) lleva agua.</li>
+   <li><b>Control:</b> pésate 1 vez por semana en ayunas (lo apuntas en la app). Si en 3–4 semanas no subes nada, añade ~150 kcal (p. ej. un plátano + un puñado de frutos secos). Si subes más de 1 kg/mes, quita ~150 kcal.</li></ul>
+   <h3>Suplementos</h3>
+   <ul><li><b>Creatina monohidrato:</b> 3–5 g/día, todos los días, sin fase de carga. Es normal subir 0,5–1 kg de agua las primeras semanas.</li>
+   <li><b>Proteína whey:</b> solo si no llegas a los ~125 g con comida. 1 cazo post-entreno o en la merienda.</li></ul></div>
 
-              <a href="${imgUrl}" target="_blank" rel="noopener noreferrer" class="img-link">📸 Ver técnica ↗</a>
-            </div>
-          `;
-        });
+  <div class="card"><h2>Qué he cambiado del plan original</h2>
+   <ul>
+   <li><b>Glúteo medio (abductor)</b> en la sesión C: es el músculo que más protege una cadera con choque femoroacetabular al correr.</li>
+   <li><b>Gemelos y core antirrotación (Pallof)</b> en la sesión A: los gemelos soportan gran parte del impacto de la zancada; el Pallof sustituye a la plancha sin flexionar la cadera.</li>
+   <li><b>Progresión de carrera semana a semana</b> (antes subía 1 km de golpe cada 2 semanas) y <b>ritmo fácil real</b> (el plan anterior te pedía los 10 km al mismo ritmo que tu 5 km actual).</li>
+   <li><b>Segundo estímulo de carrera</b>: desde la semana 5, el cardio final de A puede ser trote suave en cinta. Con una sola carrera a la semana es difícil llegar a 10 km “sin cansarte”.</li>
+   <li><b>Descarga en la semana 8</b>, antes del bloque más exigente (8–10 km).</li>
+   <li><b>Macros cuadrados:</b> los anteriores sumaban ~2.250 kcal, no las 2.350–2.400 objetivo.</li>
+   <li><b>Orden de sesiones</b> pensado para no correr con las piernas cargadas.</li>
+   </ul></div>
 
-        card.innerHTML = html;
-        container.appendChild(card);
-      });
-    }
+  <div class="card"><h2>¿Y después de la semana 12?</h2>
+   <p>Nuevo bloque de 8–12 semanas: mantener 10 km y trabajar ritmo, o preparar una carrera popular. En el gimnasio, cambiar 2–3 ejercicios y los rangos de reps. Guarda una copia de seguridad antes de cambiar el código.</p>
+   <p class="small muted">Esto es una guía de entrenamiento general, no sustituye a tu traumatólogo o fisio. Fotos de ejercicios: Free Exercise DB (dominio público).</p></div>`;
+}
 
-    function toggleExercise(id, checkbox) {
-      const currentWeek = getCurrentWeek();
-      const savedState = JSON.parse(localStorage.getItem(`workoutState_w${currentWeek}_v9`) || "{}");
-      savedState[id] = checkbox.checked;
-      localStorage.setItem(`workoutState_w${currentWeek}_v9`, JSON.stringify(savedState));
-      renderWorkout();
-    }
+/* ============================================================
+   DATOS (inicio, copia de seguridad)
+   ============================================================ */
+function renderDatos(){
+  $('#tab-datos').innerHTML=`
+  <div class="card"><h2 style="font-size:17px;margin:0 0 6px">Fecha de inicio del plan</h2>
+   <p class="small t2" style="margin:0 0 8px">Con la fecha de inicio la app abre directamente la semana que te toca.</p>
+   <input type="date" data-k="startDate" value="${esc(S.startDate)}">
+   ${currentWeekFromStart()?`<p class="small t2">Hoy estás en la <b>semana ${currentWeekFromStart()}</b>.</p>`:''}</div>
+  <div class="card"><h2 style="font-size:17px;margin:0 0 6px">Copia de seguridad</h2>
+   <p class="small t2" style="margin:0">Tus datos se guardan solo en este iPhone (en la app de la pantalla de inicio). Si borras datos de Safari o cambias de móvil se pierden, así que haz una copia de vez en cuando.</p>
+   <button class="btn primary" data-act="export">⬇︎ Descargar copia (.json)</button>
+   <button class="btn" data-act="copyjson">📋 Copiar copia al portapapeles</button>
+   <h3 style="font-size:15px;margin:16px 0 6px">Restaurar</h3>
+   <input type="file" id="impfile" accept="application/json,.json,.txt">
+   <textarea id="imptxt" placeholder="…o pega aquí el texto de la copia" style="margin-top:8px"></textarea>
+   <button class="btn" data-act="importtxt">Restaurar desde texto</button></div>
+  <div class="card"><button class="btn danger" data-act="wipe">Borrar todos los datos</button></div>`;
+}
+function exportData(){
+  try{
+    const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='rutina10k_backup_'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  }catch(e){ copyText(JSON.stringify(S)); }
+}
+function importData(txt){
+  try{ const d=JSON.parse(txt); if(!d||typeof d!=='object'||!d.weeks) throw 0;
+    if(!confirm('Esto sustituirá los datos actuales por la copia. ¿Continuar?')) return;
+    S=d; persist(); renderAll(); toast('Copia restaurada'); }
+  catch(e){ toast('Ese texto no es una copia válida'); }
+}
 
-    function saveLog(id, field, value) {
-      const currentWeek = getCurrentWeek();
-      const savedLogs = JSON.parse(localStorage.getItem(`workoutLogs_w${currentWeek}_v9`) || "{}");
-      if (!savedLogs[id]) savedLogs[id] = {};
-      savedLogs[id][field] = value;
-      localStorage.setItem(`workoutLogs_w${currentWeek}_v9`, JSON.stringify(savedLogs));
-    }
+function renderAll(){ renderPlan(); setTab(ui.tab); }
 
-    function changeWeek(week) {
-      localStorage.setItem("appCurrentWeek_v9", week);
-      renderWorkout();
-    }
-
-    function clearCurrentWeek() {
-      const currentWeek = getCurrentWeek();
-      if (confirm(`¿Quieres borrar los registros y casillas marcadas de la Semana ${currentWeek}?`)) {
-        localStorage.removeItem(`workoutState_w${currentWeek}_v9`);
-        localStorage.removeItem(`workoutLogs_w${currentWeek}_v9`);
-        renderWorkout();
-      }
-    }
-
-    renderWorkout();
-  </script>
+// Inicio: ir a la semana actual si hay fecha de inicio
+(function init(){
+  const a=currentWeekFromStart(); if(a) S.week=a;
+  if(!S.week) S.week=1;
+  ui.open[S.week+'A']=false;
+  renderAll();
+})();
+</script>
 </body>
 </html>
