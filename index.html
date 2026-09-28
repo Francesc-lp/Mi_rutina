@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rutina Hipertrofia & Progresión 10K</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --accent: #10b981;
+      --muted: #64748b;
+      --link: #38bdf8;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1rem;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+    h1 { text-align: center; font-size: 1.4rem; margin-bottom: 0.25rem; color: var(--link); }
+    .subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 1.25rem; }
+    
+    .week-selector {
+      background: var(--card-bg);
+      padding: 0.8rem;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #334155;
+    }
+    .week-selector select {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--muted);
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .day-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+    }
+    .day-title {
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-top: 0;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 0.5rem;
+    }
+    .exercise-item {
+      display: flex;
+      flex-direction: column;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #334155;
+    }
+    .exercise-item:last-child { border-bottom: none; }
+    .exercise-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .exercise-info { display: flex; flex-direction: column; padding-right: 0.5rem; }
+    .exercise-name { font-weight: 600; font-size: 0.95rem; }
+    .exercise-details { font-size: 0.8rem; color: #94a3b8; margin-top: 0.15rem; }
+    
+    .log-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      align-items: center;
+    }
+    .log-inputs input {
+      background: var(--bg);
+      border: 1px solid #334155;
+      color: var(--text);
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .img-link {
+      display: inline-block;
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .img-link:hover { text-decoration: underline; }
+
+    input[type="checkbox"] {
+      width: 1.3rem;
+      height: 1.3rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .completed { opacity: 0.4; text-decoration: line-through; }
+    .reset-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: #334155;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏃‍♂️ Rutina & Plan Progresión 10K</h1>
+  <div class="subtitle">Hipertrofia, Resistencia y Control de Cargas</div>
+
+  <div class="week-selector">
+    <label for="weekSelect"><strong>Semana actual:</strong></label>
+    <select id="weekSelect" onchange="changeWeek(this.value)">
+      <option value="1">Semana 1 (Base 5 km)</option>
+      <option value="2">Semana 2 (Base 5 km)</option>
+      <option value="3">Semana 3 (Subida 6 km)</option>
+      <option value="4">Semana 4 (Asimilación 6 km)</option>
+      <option value="5">Semana 5 (Subida 7 km)</option>
+      <option value="6">Semana 6 (Asimilación 7 km)</option>
+      <option value="7">Semana 7 (Subida 8 km)</option>
+      <option value="8">Semana 8 (Asimilación 8 km)</option>
+      <option value="9">Semana 9 (DESCARGA 4 km)</option>
+      <option value="10">Semana 10 (Subida 9 km)</option>
+      <option value="11">Semana 11 (Asimilación 9 km)</option>
+      <option value="12">Semana 12 (¡RETO 10 KM!)</option>
+    </select>
+  </div>
+
+  <div id="workout-container"></div>
+
+  <button class="reset-btn" onclick="clearCurrentWeek()">Borrar registros de esta semana</button>
+
+  <script>
+    const runProgression = {
+      1: "OBJETIVO: Carrera continua suave 5 km a ritmo cómodo (~35 min). P.P.M. objetivo: 120-135.",
+      2: "OBJETIVO: Carrera continua suave 5 km a ritmo cómodo (~35 min). Consolida sensaciones.",
+      3: "OBJETIVO: Carrera continua suave 6 km a ritmo cómodo (~42 min). P.P.M. objetivo: 120-135.",
+      4: "OBJETIVO: Carrera continua suave 6 km a ritmo cómodo (~42 min). Controla articulaciones.",
+      5: "OBJETIVO: Carrera continua suave 7 km a ritmo cómodo (~49 min). P.P.M. objetivo: 125-140.",
+      6: "OBJETIVO: Carrera continua suave 7 km a ritmo cómodo (~49 min). Foco en cadera sin molestias.",
+      7: "OBJETIVO: Carrera continua suave 8 km a ritmo cómodo (~56 min). P.P.M. objetivo: 125-140.",
+      8: "OBJETIVO: Carrera continua suave 8 km a ritmo cómodo (~56 min). Mantenlo fluido.",
+      9: "OBJETIVO DESCARGA: Trote muy suave 4 km (~28 min) para recuperar cadera y descargar.",
+      10: "OBJETIVO: Carrera continua suave 9 km a ritmo cómodo (~63 min). P.P.M. objetivo: 125-140.",
+      11: "OBJETIVO: Carrera continua suave 9 km a ritmo cómodo (~63 min). Último escalón antes de los 10K.",
+      12: "OBJETIVO FINAL: 10 km continuos a ritmo controlado (~70 min). ¡A por ello!"
+    };
+
+    const workoutData = [
+      {
+        dayGroup: 1,
+        day: "Día 1: Gimnasio (Torso Hipertrofia + Cardio)",
+        exercises: [
+          { id: "d1_e1", name: "Press de Banca Plano", details: "4 series × 8-10 reps", imgSearch: "bench+press", isCardio: false },
+          { id: "d1_e2", name: "Remo Gironda / Polea Baja", details: "4 series × 10-12 reps", imgSearch: "seated+cable+row", isCardio: false },
+          { id: "d1_e3", name: "Press Militar con Mancuernas", details: "3 series × 10-12 reps", imgSearch: "dumbbell+shoulder+press", isCardio: false },
+          { id: "d1_e4", name: "Jalón al Pecho", details: "3 series × 10-12 reps", imgSearch: "lat+pulldown", isCardio: false },
+          { id: "d1_e5", name: "Elevaciones Laterales", details: "3 series × 12-15 reps", imgSearch: "lateral+raise", isCardio: false },
+          { id: "d1_e6", name: "Superserie Bíceps + Tríceps en Polea", details: "3 series × 12 reps", imgSearch: "triceps+pushdown", isCardio: false },
+          { id: "d1_e7", name: "Cardio Final (Elíptica / Bici)", details: "15-20 min ritmo constante", imgSearch: "elliptical+trainer", isCardio: true }
+        ]
+      },
+      {
+        dayGroup: 2,
+        day: "Día 2: Cardio / Carrera (Progresión a 10K)",
+        exercises: [
+          { id: "d2_e1", name: "Calentamiento: Caminata Ligera", details: "5 minutos a paso vivo", imgSearch: "walking", isCardio: true },
+          { id: "d2_e2", name: "Carrera Principal (Prescrita por Entrenador)", details: "", imgSearch: "running", isCardio: true },
+          { id: "d2_e3", name: "Opción Gimnasio (Si no es posible correr)", details: "20 min Elíptica + 15 min Bici estática en Zona 2", imgSearch: "stationary+bike", isCardio: true },
+          { id: "d2_e4", name: "Vuelta a la calma / Estiramientos", details: "5-10 min de caminata e higiene articular", imgSearch: "stretching", isCardio: true }
+        ]
+      },
+      {
+        dayGroup: 3,
+        day: "Día 3: Gimnasio (Pierna Adaptada + Torso)",
+        exercises: [
+          { id: "d3_e1", name: "Prensa de Piernas (Rango cómodo)", details: "4 series × 10-12 reps", imgSearch: "leg+press", isCardio: false },
+          { id: "d3_e2", name: "Peso Muerto Rumano con Mancuernas", details: "3 series × 10 reps", imgSearch: "romanian+deadlift", isCardio: false },
+          { id: "d3_e3", name: "Curl Femoral en Máquina", details: "3 series × 12 reps", imgSearch: "lying+leg+curl", isCardio: false },
+          { id: "d3_e4", name: "Puente de Glúteo / Hip Thrust", details: "3 series × 12 reps", imgSearch: "hip+thrust", isCardio: false },
+          { id: "d3_e5", name: "Contractora / Aberturas Máquina", details: "3 series × 12 reps", imgSearch: "chest+fly+machine", isCardio: false },
+          { id: "d3_e6", name: "Remo Unilateral con Mancuerna", details: "3 series × 10-12 reps", imgSearch: "dumbbell+row", isCardio: false },
+          { id: "d3_e7", name: "Paseo del Granjero (Farmer Carry)", details: "3 series × 40 metros", imgSearch: "farmers+walk", isCardio: false }
+        ]
+      }
+    ];
+
+    function getCurrentWeek() {
+      return localStorage.getItem("appCurrentWeek_v9") || "1";
+    }
+
+    function renderWorkout() {
+      const container = document.getElementById("workout-container");
+      container.innerHTML = "";
+      
+      const currentWeek = getCurrentWeek();
+      document.getElementById("weekSelect").value = currentWeek;
+
+      const savedState = JSON.parse(localStorage.getItem(`workoutState_w${currentWeek}_v9`) || "{}");
+      const savedLogs = JSON.parse(localStorage.getItem(`workoutLogs_w${currentWeek}_v9`) || "{}");
+
+      // Actualizar la indicación de la carrera del Día 2
+      workoutData[1].exercises[1].details = runProgression[currentWeek] || runProgression[1];
+
+      workoutData.forEach(group => {
+        const card = document.createElement("div");
+        card.className = "day-card";
+
+        let html = `<h2 class="day-title">${group.day}</h2>`;
+        
+        group.exercises.forEach(ex => {
+          const isChecked = savedState[ex.id] || false;
+          const logData = savedLogs[ex.id] || { field1: "", field2: "", field3: "" };
+          const imgUrl = `https://www.google.com/search?tbm=isch&q=${ex.imgSearch}+exercise+form`;
+          
+          let inputHTML = "";
+          if (ex.isCardio) {
+            // Cardio: Distancia, Tiempo y PPM/Sensaciones
+            inputHTML = `
+              <div class="log-inputs">
+                <input type="text" placeholder="Distancia (ej: 5 km / 3 km)" value="${logData.field1 || ''}" onchange="saveLog('${ex.id}', 'field1', this.value)">
+                <input type="text" placeholder="Tiempo (ej: 35 min)" value="${logData.field2 || ''}" onchange="saveLog('${ex.id}', 'field2', this.value)">
+                <input type="text" placeholder="PPM / Cadera ok?" value="${logData.field3 || ''}" onchange="saveLog('${ex.id}', 'field3', this.value)">
+              </div>
+            `;
+          } else {
+            // Fuerza: Pesos y Repeticiones
+            inputHTML = `
+              <div class="log-inputs">
+                <input type="text" placeholder="Peso (ej: 22 kg)" value="${logData.field1 || ''}" onchange="saveLog('${ex.id}', 'field1', this.value)">
+                <input type="text" placeholder="Reps (ej: 10,10,9)" value="${logData.field2 || ''}" onchange="saveLog('${ex.id}', 'field2', this.value)">
+              </div>
+            `;
+          }
+
+          html += `
+            <div class="exercise-item ${isChecked ? 'completed' : ''}">
+              <div class="exercise-main">
+                <div class="exercise-info">
+                  <span class="exercise-name">${ex.name}</span>
+                  <span class="exercise-details">${ex.details}</span>
+                </div>
+                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleExercise('${ex.id}', this)">
+              </div>
+              
+              ${inputHTML}
+
+              <a href="${imgUrl}" target="_blank" rel="noopener noreferrer" class="img-link">📸 Ver técnica ↗</a>
+            </div>
+          `;
+        });
+
+        card.innerHTML = html;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleExercise(id, checkbox) {
+      const currentWeek = getCurrentWeek();
+      const savedState = JSON.parse(localStorage.getItem(`workoutState_w${currentWeek}_v9`) || "{}");
+      savedState[id] = checkbox.checked;
+      localStorage.setItem(`workoutState_w${currentWeek}_v9`, JSON.stringify(savedState));
+      renderWorkout();
+    }
+
+    function saveLog(id, field, value) {
+      const currentWeek = getCurrentWeek();
+      const savedLogs = JSON.parse(localStorage.getItem(`workoutLogs_w${currentWeek}_v9`) || "{}");
+      if (!savedLogs[id]) savedLogs[id] = {};
+      savedLogs[id][field] = value;
+      localStorage.setItem(`workoutLogs_w${currentWeek}_v9`, JSON.stringify(savedLogs));
+    }
+
+    function changeWeek(week) {
+      localStorage.setItem("appCurrentWeek_v9", week);
+      renderWorkout();
+    }
+
+    function clearCurrentWeek() {
+      const currentWeek = getCurrentWeek();
+      if (confirm(`¿Quieres borrar los registros y casillas marcadas de la Semana ${currentWeek}?`)) {
+        localStorage.removeItem(`workoutState_w${currentWeek}_v9`);
+        localStorage.removeItem(`workoutLogs_w${currentWeek}_v9`);
+        renderWorkout();
+      }
+    }
+
+    renderWorkout();
+  </script>
+</body>
+</html>
