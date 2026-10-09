@@ -75,6 +75,11 @@ textarea{resize:vertical;min-height:60px}
 .ex-h .nm{flex:1}
 .ex-h .nm b{font-size:15px}
 .ex-h .nm .det{font-size:13px;color:var(--text2);margin-top:2px}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:2px}
+.badge.pri{background:var(--good-soft);color:var(--good)}
+.badge.opt{background:var(--card2);color:var(--muted);border:1px solid var(--line)}
+.legend{font-size:12px;color:var(--text2);margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.legend .badge{margin-left:0}
 .tag{font-size:11px;font-weight:700;color:var(--good);margin-left:4px;vertical-align:1px}
 .chk{width:30px;height:30px;border-radius:9px;border:2px solid var(--line);background:var(--card2);flex-shrink:0;display:grid;place-items:center;color:transparent;font-size:17px;font-weight:800}
 .ex.done .chk{background:var(--good);border-color:var(--good);color:#fff}
@@ -438,6 +443,8 @@ function renderSess(w,k){
   if(hasExp) h+=`<button class="btn ${s.express?'primary':''}" data-act="express">${s.express
       ? `⚡ Modo exprés (~${exp} min) · toca para ver la sesión completa`
       : `⚡ ¿Gimnasio lleno o poco tiempo? Modo exprés (~${exp} min en vez de ~${full})`}</button>`;
+  if(hasExp){ const nOpt=def.items.filter(i=>!i.pri).length;
+    h+=`<div class="legend"><span><span class="badge pri">Obligatorio</span> siempre</span><span><span class="badge opt">Opcional</span> si hay tiempo${s.express?` · ${nOpt} ocultos`:''}</span></div>`; }
   for(const it of def.items) h+=renderItem(w,k,it);
   h+=`<div class="meta">
     <div class="fld"><label>Fecha</label><input type="date" data-k="s.date" value="${esc(s.date)}"></div>
@@ -492,7 +499,7 @@ function renderItem(w,k,base){
   body+=`<button class="linkbtn" data-act="tech" data-id="${tk}">${show?'Ocultar técnica':'📸 Ver técnica'}</button>
    <div class="tech ${show?'show':''}" id="tech-${tk}">${show?techHTML(it):''}</div>`;
   return `<div class="ex ${e.done?'done':''} ${hide?'hidden':''}" data-ex="${base.id}">
-    <div class="ex-h"><div class="nm"><b>${esc(it.name)}</b>${base.pri?'':'<span class="tag" style="color:var(--muted)">ACCESORIO</span>'}<div class="det">${det}</div></div>
+    <div class="ex-h"><div class="nm"><b>${esc(it.name)}</b><span class="badge ${base.pri?'pri':'opt'}">${base.pri?'Obligatorio':'Opcional'}</span><div class="det">${det}</div></div>
     <button class="chk" data-act="done" aria-label="Marcar hecho">✓</button></div>${body}</div>`;
 }
 function techHTML(it){
@@ -748,7 +755,7 @@ function renderPlan(){
 
   <div class="card"><h2>Si el gimnasio está lleno</h2>
    <ul><li><b>Alternativas:</b> cada ejercicio tiene un desplegable “¿Máquina ocupada?”. Elige la que hayas hecho y la app compara el peso solo con esa misma máquina.</li>
-   <li><b>Modo exprés:</b> deja solo los ejercicios prioritarios y como máximo 3 series por ejercicio (~50 min en vez de ~80). Los marcados como ACCESORIO se pueden saltar sin problema algunas semanas.</li>
+   <li><b>Modo exprés:</b> deja solo los ejercicios prioritarios y como máximo 3 series por ejercicio (~50 min en vez de ~80). Los marcados como OPCIONAL se pueden saltar sin problema algunas semanas.</li>
    <li><b>Prioridad si vas justo:</b> en A, empujes y tirones básicos + gemelos; en C, prensa/hack, bisagra de cadera (rumano o hiperextensiones), hip thrust, abductor y remo.</li>
    <li><b>Reps:</b> escribe la S1 y se copia al resto de series; solo corriges la que cambie.</li></ul></div>
 
