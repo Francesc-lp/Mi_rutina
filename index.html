@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rutina 10K">
 <meta name="theme-color" content="#0f1115">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" href="icon.png">
 <style>
@@ -143,6 +145,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 </div></header>
 
 <main class="wrap">
+  <div id="upd"></div>
   <section id="tab-semana"></section>
   <section id="tab-progreso" class="hidden"></section>
   <section id="tab-plan" class="hidden plan"></section>
@@ -160,13 +163,14 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 /* ============================================================
    CONFIGURACIÓN DEL PLAN  (edita aquí si cambian ejercicios)
    ============================================================ */
+const APP_VERSION = '2.5';
 const IMG = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
 const TOTAL_WEEKS = 12;
 const DELOAD = [8];
 
-// Carrera principal (Sesión B). Ritmo fácil orientativo 7:15–7:45 min/km.
+// Carrera principal (Sesión B). Ritmo fácil orientativo 7:00–7:40 min/km; manda la frecuencia cardiaca (<150 ppm).
 const RUN_KM = {1:5,2:5,3:5.5,4:6,5:6.5,6:7,7:7.5,8:5,9:8,10:8.5,11:9,12:10};
-const EASY_MIN = 7.25, EASY_MAX = 7.75;
+const EASY_MIN = 7.0, EASY_MAX = 7.67;
 
 function isDeload(w){ return DELOAD.includes(+w); }
 function runText(w){
@@ -192,6 +196,7 @@ const SESSIONS = {
          {v:'manc',name:'Press de banca con mancuernas',img:'Dumbbell_Bench_Press',inc:2,cues:['Mancuernas a la altura del pecho abajo','Codos a ~45° del cuerpo']}]},
   {id:'a2',type:'str',pri:true,name:'Remo en polea baja (Gironda)',sets:4,min:10,max:12,inc:2.5,img:'Seated_Cable_Rows',
    cues:['Pecho alto, espalda neutra','Lleva los codos atrás pegados al cuerpo','No balancees el tronco'],
+   hip:'Al estirar los brazos no te inclines hacia delante: esa flexión profunda de cadera es la que puede pinzar. Si la cadera avisa, usa el remo con apoyo de pecho.',
    alts:[{v:'maq',name:'Remo en máquina (con apoyo de pecho)',img:'Leverage_Iso_Row',cues:['Pecho apoyado','Tira con los codos, junta escápulas']}]},
   {id:'a3',type:'str',pri:true,name:'Press militar con mancuernas (sentado)',sets:3,min:10,max:12,inc:2,img:'Dumbbell_Shoulder_Press',
    cues:['Respaldo casi vertical','Mancuernas a la altura de la oreja abajo','No arquees la zona lumbar'],
@@ -208,11 +213,12 @@ const SESSIONS = {
    alts:[{v:'manc',name:'Curl martillo con mancuernas',img:'Hammer_Curls',inc:1},{v:'maq',name:'Curl de bíceps en máquina',img:'Machine_Bicep_Curl'}]},
   {id:'a7',type:'str',name:'Extensión de tríceps en polea (cuerda)',sets:3,min:10,max:12,inc:2.5,img:'Triceps_Pushdown_-_Rope_Attachment',
    cues:['Codos fijos','Abre la cuerda abajo','Si la polea está libre, alterna series con el curl (misma máquina)'],
-   alts:[{v:'maq',name:'Tríceps en máquina',img:'Machine_Triceps_Extension'}]},
+   alts:[{v:'maq',name:'Tríceps en máquina',img:'Machine_Triceps_Extension'},
+         {v:'fondos',name:'Fondos (máquina asistida o peso corporal)',img:'Dips_-_Triceps_Version',noKg:true,min:8,max:12,inc:1,cues:['Tronco vertical para cargar tríceps','Baja solo hasta 90° de codo','Si usas asistencia, apunta los kg en notas']}]},
   {id:'a8',type:'str',pri:true,name:'Elevación de gemelos de pie',sets:3,min:12,max:15,inc:2.5,img:'Standing_Calf_Raises',
    cues:['Sube alto, pausa 1 s arriba','Baja lento hasta estirar','Clave para aguantar más km sin sobrecargar tobillo/rodilla'],
    alts:[{v:'prensa',name:'Gemelo en prensa',img:'Calf_Press_On_The_Leg_Press_Machine',inc:5,cues:['Solo la punta del pie en la plataforma','Rodillas casi estiradas']},
-         {v:'sent',name:'Gemelo sentado (sóleo)',img:'Seated_Calf_Raise'}]},
+         {v:'sent',name:'Gemelo sentado (sóleo)',img:'Seated_Calf_Raise',hip:'Sentado, la cadera está a 90° con la carga sobre las rodillas. Si la cadera te marca 2/10 en esta sesión, prueba el gemelo de pie o en prensa.'}]},
   {id:'a9',type:'str',name:'Pallof press (core antirrotación)',sets:3,min:10,max:12,inc:2.5,img:'Pallof_Press',unit:'reps/lado',
    cues:['De lado a la polea, pies a la anchura de caderas','Estira los brazos sin dejar que el tronco gire','Protege la pelvis al correr'],
    alts:[{v:'plank',name:'Plancha abdominal',img:'Plank',noKg:true,unit:'seg',min:45,max:60,inc:5,cues:['Glúteo y abdomen apretados','Cuerpo en línea, sin hundir la lumbar','Cuando llegues a 60 s, prueba plancha lateral'],hip:'La plancha también es segura para tu cadera (no la flexiona).'}]},
@@ -236,13 +242,15 @@ const SESSIONS = {
    cues:['Pies a la anchura de hombros o algo más abiertos, puntas ligeramente fuera','Baja solo hasta que la pelvis no se despegue del respaldo','Rodillas siguen la línea de los pies'],
    hip:'No bajes el carro hasta que la cadera “pince” o la lumbar se redondee.',
    alts:[{v:'hack',name:'Sentadilla hack (máquina)',img:'Hack_Squat',cues:['Pies algo adelantados y a la anchura de hombros','Baja hasta muslos paralelos como mucho','Espalda pegada al respaldo todo el recorrido'],
-          hip:'La hack flexiona más la cadera que la prensa: para antes de notar pinzamiento y no busques profundidad.'}]},
+          hip:'La hack flexiona más la cadera que la prensa: para antes de notar pinzamiento y no busques profundidad.'},
+         {v:'stepup',name:'Subida a cajón con mancuernas (step-up)',img:'Dumbbell_Step_Ups',inc:2,unit:'reps/pierna',cues:['Cajón a la altura de media tibia–rodilla, nunca más alto','Empuja con la pierna de arriba, sin impulsarte con la de abajo','Muy específico para correr'],
+          hip:'Cajón bajo: si la rodilla de arriba queda por encima de la cadera, el cajón es demasiado alto.'},
+         {v:'goblet',name:'Sentadilla goblet a cajón alto',img:'Goblet_Squat',inc:2,cues:['Siéntate atrás hasta tocar el cajón y sube','Pies algo abiertos, puntas fuera','El cajón limita la profundidad: protege la cadera']}]},
   {id:'c2',type:'str',pri:true,name:'Peso muerto rumano con mancuernas',sets:3,min:8,max:10,inc:2,img:'Stiff-Legged_Dumbbell_Deadlift',
    cues:['Caderas atrás, espalda neutra','Mancuernas pegadas a las piernas','Baja hasta media tibia o donde notes isquios, no más'],
    hip:'Rango controlado; si la cadera molesta, usa hiperextensiones a 45°.',
    alts:[{v:'hiper',name:'Hiperextensiones a 45° (glúteo/isquio)',img:'Hyperextensions_Back_Extensions',inc:2.5,cues:['Cadera justo por encima del borde del cojín','Sube hasta alinear el cuerpo, sin hiperextender la lumbar','Peso: disco en el pecho (pon 0 si sin peso)']},
-         {v:'pull',name:'Pull-through en polea',img:'Pull_Through',inc:2.5,cues:['De espaldas a la polea baja, cuerda entre las piernas','Caderas atrás y empuja con glúteo']},
-         {v:'curlsent',name:'Curl femoral sentado',img:'Seated_Leg_Curl',inc:2.5,cues:['Solo si no hay alternativa: repite el trabajo del curl tumbado'],hip:'Ojo: con esta opción pierdes el trabajo de bisagra de cadera. Mejor hiperextensiones.'}]},
+         {v:'pull',name:'Pull-through en polea',img:'Pull_Through',inc:2.5,cues:['De espaldas a la polea baja, cuerda entre las piernas','Caderas atrás y empuja con glúteo']}]},
   {id:'c3',type:'str',pri:true,name:'Hip thrust / puente de glúteo',sets:3,min:10,max:12,inc:5,img:'Barbell_Hip_Thrust',
    cues:['Barbilla recogida','Sube hasta alinear rodilla-cadera-hombro','Pausa 1 s arriba apretando glúteo'],
    alts:[{v:'suelo',name:'Puente de glúteo en suelo con disco',img:'Barbell_Glute_Bridge'}]},
@@ -343,6 +351,7 @@ function suggestion(w,k,it,cur){
   if(!reps.length) return {cls:'warn', txt:`Sem. ${prev.week}: ${fmtN(kg)} kg, sin reps apuntadas. Repite ${fmtN(kg)} kg y apunta las reps (escribe la S1 y se copia al resto).`};
   const hist = `Sem. ${prev.week}: ${fmtN(kg)} kg · ${reps.join('/')}`;
   if(isDeload(w)) return {cls:'', txt:`${hist}. Descarga → usa ~${fmtN(Math.round(kg*0.7/it.inc)*it.inc)} kg y haz una serie menos.`};
+  if(full && Math.min(...reps)>=it.max+2) return {cls:'up', txt:`${hist}. ✅ Te sobran reps (rango ${it.min}–${it.max}) → sube a ${fmtN(kg+2*it.inc)} kg o más, hasta que te cueste llegar a ${it.max}.`};
   if(full) return {cls:'up', txt:`${hist}. ✅ Completaste el rango → sube a ${fmtN(kg+it.inc)} kg.`};
   if(reps.some(r=>r<it.min)) return {cls:'', txt:`${hist}. Mantén ${fmtN(kg)} kg hasta llegar a ${it.min} ${u} en todas las series.`};
   return {cls:'', txt:`${hist}. Mismo peso, intenta +1 rep en alguna serie.`};
@@ -461,6 +470,8 @@ function renderSess(w,k){
 function cardioMode(it,e,w){ return e.mode || (it.modeDef?it.modeDef(w):'eli'); }
 function cardioNote(it,e,w){
   const m=cardioMode(it,e,w), run=RUN_MODES.includes(m), out=[];
+  const mn=num(e.min), lim=it.id==='b1'?150:60;
+  if(mn!=null && mn>lim) out.push(`<div class="hint warn">⚠️ ¿${e.min} minutos? Revisa si es un error al escribir (p. ej. 15 en vez de 151).</div>`);
   if(run && pace(e.km,e.min)) out.push('Ritmo: '+pace(e.km,e.min));
   const p=num(e.ppm);
   if(p!=null && p>HR_MAX_EASY && (run || it.id==='b1'))
@@ -579,6 +590,10 @@ document.addEventListener('click', ev=>{
     b.textContent=ui.tech[id]?'Ocultar técnica':'📸 Ver técnica';
   }
   else if(a==='summary'){ copyText(buildSummary(w)); }
+  else if(a==='doupdate'){ reloadFresh(); }
+  else if(a==='setcur'){ const n=+$('#curWk').value, d=new Date(); d.setDate(d.getDate()-(n-1)*7);
+    S.startDate=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); S.week=n; persist(); renderDatos(); toast('Calendario ajustado: semana '+n); }
+  else if(a==='update'){ toast('Buscando…'); checkUpdate(true); }
   else if(a==='export'){ exportData(); }
   else if(a==='copyjson'){ copyText(JSON.stringify(S)); }
   else if(a==='importtxt'){ importData($('#imptxt').value); }
@@ -767,7 +782,7 @@ function renderPlan(){
    <tr><td>8</td><td class="num">5</td><td>Descarga</td></tr>
    <tr><td>9–11</td><td class="num">8 → 9</td><td>+0,5 km/semana</td></tr>
    <tr><td>12</td><td class="num">10</td><td>¡Objetivo!</td></tr></table>
-   <p>Hoy haces 5 km en 35 min (7:00/km), pero eso es tu ritmo “apretando”. Para llegar a 10 km <i>sin cansarte</i>, los rodajes van a <b>7:15–7:45/km</b> o al ritmo que te deje hablar. El tiempo no es el objetivo; la distancia y las sensaciones sí.</p>
+   <p>Hoy haces 5 km en 35 min (7:00/km), pero eso es tu ritmo “apretando”. Para llegar a 10 km <i>sin cansarte</i>, los rodajes van a <b>7:00–7:40/km</b> según el terreno, pero <b>manda el pulso: por debajo de 150 ppm</b> (en la semana 3, 7:35/km con 144 ppm fue perfecto). El tiempo no es el objetivo; la distancia y las sensaciones sí.</p>
    <h3>Semáforo de la cadera (0–10)</h3>
    <ul><li>🟢 0–2: sigue el plan.</li><li>🟡 3–5: aceptable si a las 24 h vuelve a ≤2. Si no, repite semana.</li><li>🔴 &gt;5 o empeora de semana en semana: no subas, cambia carrera por elíptica y consulta al fisio.</li></ul></div>
 
@@ -808,7 +823,11 @@ function renderDatos(){
   <div class="card"><h2 style="font-size:17px;margin:0 0 6px">Fecha de inicio del plan</h2>
    <p class="small t2" style="margin:0 0 8px">Con la fecha de inicio la app abre directamente la semana que te toca.</p>
    <input type="date" data-k="startDate" value="${esc(S.startDate)}">
-   ${currentWeekFromStart()?`<p class="small t2">Hoy estás en la <b>semana ${currentWeekFromStart()}</b>.</p>`:''}</div>
+   ${currentWeekFromStart()?`<p class="small t2">Hoy estás en la <b>semana ${currentWeekFromStart()}</b>.</p>`:''}
+   <h3 style="font-size:15px;margin:14px 0 6px">¿Vas adelantado o retrasado?</h3>
+   <p class="small t2" style="margin:0 0 8px">Elige la semana que estás haciendo ahora y la app recoloca el calendario (no se pierde ningún dato).</p>
+   <div class="row"><select id="curWk">${[...Array(TOTAL_WEEKS)].map((_,i)=>`<option value="${i+1}" ${(currentWeekFromStart()||S.week)===i+1?'selected':''}>Semana ${i+1}</option>`).join('')}</select>
+   <button class="btn primary" style="margin:0;width:auto;padding:9px 14px" data-act="setcur">Ajustar</button></div></div>
   <div class="card"><h2 style="font-size:17px;margin:0 0 6px">Copia de seguridad</h2>
    <p class="small t2" style="margin:0">Tus datos se guardan solo en este iPhone (en la app de la pantalla de inicio). Si borras datos de Safari o cambias de móvil se pierden, así que haz una copia de vez en cuando.</p>
    <button class="btn primary" data-act="export">⬇︎ Descargar copia (.json)</button>
@@ -817,6 +836,9 @@ function renderDatos(){
    <input type="file" id="impfile" accept="application/json,.json,.txt">
    <textarea id="imptxt" placeholder="…o pega aquí el texto de la copia" style="margin-top:8px"></textarea>
    <button class="btn" data-act="importtxt">Restaurar desde texto</button></div>
+  <div class="card"><h2 style="font-size:17px;margin:0 0 6px">Versión de la app</h2>
+   <p class="small t2" style="margin:0">Tienes la versión <b>${APP_VERSION}</b>. Tus datos no se pierden al actualizar.</p>
+   <button class="btn" data-act="update">🔄 Buscar actualización</button></div>
   <div class="card"><button class="btn danger" data-act="wipe">Borrar todos los datos</button></div>`;
 }
 function exportData(){
@@ -833,6 +855,23 @@ function importData(txt){
   catch(e){ toast('Ese texto no es una copia válida'); }
 }
 
+/* ============================================================
+   ACTUALIZACIONES (evita quedarse con la versión en caché del iPhone)
+   ============================================================ */
+function reloadFresh(){ persist(); location.replace(location.pathname+'?v='+Date.now()); }
+function checkUpdate(manual){
+  if(!/^https?:/.test(location.protocol)) { if(manual) toast('Solo funciona desde la web publicada'); return; }
+  fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{
+    const m=t.match(/APP_VERSION = '([^']+)'/), remote=m&&m[1];
+    if(remote && remote!==APP_VERSION){
+      if(manual) return reloadFresh();
+      $('#upd').innerHTML=`<div class="card" style="border-color:var(--accent)"><b>🔄 Hay una versión nueva (${esc(remote)})</b>
+        <div class="small t2" style="margin:4px 0 0">Tus datos se mantienen.</div><button class="btn primary" data-act="doupdate">Actualizar ahora</button></div>`;
+    } else if(manual){ toast('Ya tienes la última versión ('+APP_VERSION+')'); }
+  }).catch(()=>{ if(manual) toast('Sin conexión, prueba más tarde'); });
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkUpdate(false); });
+
 function renderAll(){ renderPlan(); setTab(ui.tab); }
 
 // Inicio: ir a la semana actual si hay fecha de inicio
@@ -848,10 +887,25 @@ function renderAll(){ renderPlan(); setTab(ui.tab); }
     if(s1.A && s1.A.date){ const p=Ex(1,'A','a9'); if(!p.w && !(p.r||[]).some(Boolean)){ p.v='plank'; p.r=['45','45','45']; p.done=true; } }
     S.mig1=true; persist();
   }
+  // Migración 2.5: el curl femoral sentado deja de ser alternativa del rumano (estaba duplicado).
+  // Los registros se mueven al ejercicio "Curl femoral" (c4) con su variante sentado.
+  if(!S.mig2){
+    const has=e=>e && (e.done || num(e.w)!=null || (e.r||[]).some(v=>v!==''&&v!=null));
+    for(const wk of Object.keys(S.weeks)){
+      const sc=S.weeks[wk].s && S.weeks[wk].s.C; if(!sc || !sc.ex) continue;
+      const c2=sc.ex.c2; if(!c2 || c2.v!=='curlsent') continue;
+      if(!has(sc.ex.c4)) sc.ex.c4=Object.assign({},c2,{v:'sent'});
+      else if(has(c2)) sc.notes=(sc.notes?sc.notes+'\n':'')+`Curl femoral sentado (extra): ${c2.w||'?'} kg · ${(c2.r||[]).filter(Boolean).join('/')}`;
+      delete sc.ex.c2;
+    }
+    S.mig2=true; persist();
+  }
   const a=currentWeekFromStart(); if(a) S.week=a;
   if(!S.week) S.week=1;
   ui.open[S.week+'A']=false;
   renderAll();
+  checkUpdate(false);
+  if(location.search) history.replaceState(null,'',location.pathname);
 })();
 </script>
 </body>
