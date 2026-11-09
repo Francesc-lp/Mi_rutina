@@ -163,7 +163,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 /* ============================================================
    CONFIGURACIÓN DEL PLAN  (edita aquí si cambian ejercicios)
    ============================================================ */
-const APP_VERSION = '2.5';
+const APP_VERSION = '2.6';
 const IMG = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
 const TOTAL_WEEKS = 12;
 const DELOAD = [8];
@@ -181,7 +181,16 @@ function runText(w){
 }
 function cardioAText(w){
   if (w<=4 || isDeload(w)) return '15 min elíptica o bici a ritmo conversacional.';
-  return '15–20 min de trote suave en cinta (1 % inclinación). Si la cadera está >2/10, haz elíptica.';
+  return 'Al empezar la sesión: 15–20 min de trote suave en cinta (1 % inclinación), <150 ppm. Si la cadera está >2/10, elíptica.';
+}
+/* Desde la semana 5 (salvo descarga) el trote de la sesión A va al principio y hace de calentamiento */
+function trotFirst(w,k){ return k==='A' && w>=5 && !isDeload(w); }
+function itemsFor(w,k){
+  const items=SESSIONS[k].items;
+  if(!trotFirst(w,k)) return items;
+  const a0=Object.assign({},items.find(i=>i.id==='a0'),{name:'Movilidad y activación',detail:'Después del trote: 2×10 puente de glúteo + círculos de cadera suaves'});
+  const a10=Object.assign({},items.find(i=>i.id==='a10'),{name:'Trote suave (al empezar)'});
+  return [a10,a0,...items.filter(i=>i.id!=='a0'&&i.id!=='a10')];
 }
 
 // pri:true = prioritario (se mantiene en modo exprés). alts = alternativas si la máquina está ocupada.
@@ -370,7 +379,7 @@ function ringSVG(done,total){
 function sessData(w,k){ const x=S.weeks[String(w)]; return x && x.s[k]; }
 function visibleItems(w,k,express){
   const s=sessData(w,k), ex = express!=null ? express : !!(s&&s.express);
-  return SESSIONS[k].items.filter(it=>!ex || it.pri);
+  return itemsFor(w,k).filter(it=>!ex || it.pri);
 }
 function sessProgress(w,k){
   const items=visibleItems(w,k), s=sessData(w,k);
@@ -454,7 +463,7 @@ function renderSess(w,k){
       : `⚡ ¿Gimnasio lleno o poco tiempo? Modo exprés (~${exp} min en vez de ~${full})`}</button>`;
   if(hasExp){ const nOpt=def.items.filter(i=>!i.pri).length;
     h+=`<div class="legend"><span><span class="badge pri">Obligatorio</span> siempre</span><span><span class="badge opt">Opcional</span> si hay tiempo${s.express?` · ${nOpt} ocultos`:''}</span></div>`; }
-  for(const it of def.items) h+=renderItem(w,k,it);
+  for(const it of itemsFor(w,k)) h+=renderItem(w,k,it);
   h+=`<div class="meta">
     <div class="fld"><label>Fecha</label><input type="date" data-k="s.date" value="${esc(s.date)}"></div>
     <div class="fld"><label>Esfuerzo sesión (RPE 1–10)</label><input inputmode="numeric" data-k="s.rpe" value="${esc(s.rpe)}" placeholder="7"></div>
@@ -522,7 +531,7 @@ function techHTML(it){
 /* ============================================================
    EVENTOS (delegados)
    ============================================================ */
-function findItem(k,id){ return SESSIONS[k].items.find(i=>i.id===id); }
+function findItem(k,id){ return itemsFor(S.week,k).find(i=>i.id===id); }
 let saveT;
 function saveSoon(){ clearTimeout(saveT); saveT=setTimeout(persist,250); }
 function refreshRing(w,k){ const [d,t]=sessProgress(w,k); const r=$('#ring-'+k); if(r) r.innerHTML=ringSVG(d,t); return [d,t]; }
@@ -654,7 +663,7 @@ function buildSummary(w){
     const extra=[]; if(s.rpe) extra.push('RPE '+s.rpe); if(s.hipD) extra.push('cadera durante '+s.hipD+'/10'); if(s.hipN) extra.push('cadera 24h '+s.hipN+'/10');
     if(extra.length) t+=` · ${extra.join(' · ')}`;
     t+='\n';
-    for(const base of def.items){
+    for(const base of itemsFor(w,k)){
       const e=peekEx(w,k,base.id); if(!e) continue;
       const it=eff(base,e), nm=it.name+(e.v?' (alternativa)':''), reps=(e.r||[]).filter(v=>v!==''&&v!=null);
       if(it.type==='str' && (e.w||reps.length)) t+=`- ${nm}: ${it.noKg?'':(e.w||'?')+' kg · '}${reps.length?reps.join('/')+(it.unit==='seg'?' s':''):'reps sin apuntar'}\n`;
@@ -786,12 +795,13 @@ function renderPlan(){
    <h3>Semáforo de la cadera (0–10)</h3>
    <ul><li>🟢 0–2: sigue el plan.</li><li>🟡 3–5: aceptable si a las 24 h vuelve a ≤2. Si no, repite semana.</li><li>🔴 &gt;5 o empeora de semana en semana: no subas, cambia carrera por elíptica y consulta al fisio.</li></ul></div>
 
-  <div class="card"><h2>Nutrición (65 kg · 172 cm · 37 años)</h2>
+  <div class="card"><h2>Nutrición (64 kg · 172 cm · 37 años) · actualizado semana 5</h2>
    <table><tr><th>Macro</th><th class="num">Gramos/día</th><th class="num">kcal</th></tr>
    <tr><td>Proteína (1,9 g/kg)</td><td class="num">~125</td><td class="num">500</td></tr>
-   <tr><td>Hidratos</td><td class="num">~310</td><td class="num">1.240</td></tr>
-   <tr><td>Grasas</td><td class="num">~70</td><td class="num">630</td></tr>
-   <tr><th>Total</th><th></th><th class="num">~2.370</th></tr></table>
+   <tr><td>Hidratos</td><td class="num">~400</td><td class="num">1.600</td></tr>
+   <tr><td>Grasas</td><td class="num">~72</td><td class="num">650</td></tr>
+   <tr><th>Total</th><th></th><th class="num">~2.750</th></tr></table>
+   <p class="small">Empezamos en ~2.370 kcal; bajaste de 65 a 64 kg, así que hemos subido en dos pasos (+250 y +150). La forma más fácil: batido post-entreno (1 cazo de whey + 300 ml de leche + 1 plátano ≈ 350 kcal).</p>
    <ul><li>Reparte la proteína en 4–5 tomas de 25–30 g.</li>
    <li>Hidratos complejos 2–3 h antes de correr. En las tiradas de 60+ min (semanas 10–12) lleva agua.</li>
    <li><b>Control:</b> pésate 1 vez por semana en ayunas (lo apuntas en la app). Si en 3–4 semanas no subes nada, añade ~150 kcal (p. ej. un plátano + un puñado de frutos secos). Si subes más de 1 kg/mes, quita ~150 kcal.</li></ul>
